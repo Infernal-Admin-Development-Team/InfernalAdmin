@@ -6,7 +6,6 @@ class Welcome(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
-        self._last_member = None
 
     @commands.Cog.listener()
     async def on_member_join(self, member):
@@ -16,3 +15,4 @@ class Welcome(commands.Cog):
         # TODO set users role to somthing so they cant interact with anything
         # TODO send users a DM asking them to agree to the rules
         # TODO post welcome message on general welcoming the user to the server
+   
