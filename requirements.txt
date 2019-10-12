@@ -1,4 +1,4 @@
-git+https://github.com/Rapptz/discord.py@master
+discord
 lxml
 psutil
 asyncpg>=0.12.0
