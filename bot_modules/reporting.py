@@ -1,3 +1,4 @@
+import discord
 from discord.ext.commands import Cog, command
 
 
@@ -7,10 +8,22 @@ class Reporting(Cog):
     def __init__(self, bot):
         self.bot = bot
 
+
     @command()
     async def report(self, ctx):
         """Submits a report to the admins"""
-        await ctx.message.delete()
+        reporter = ctx.message.author
+
+        def check(m):
+            if isinstance(m.channel, discord.DMChannel):
+                return m.author == reporter
+
+        if not isinstance(ctx.message.channel, discord.DMChannel):
+            await ctx.message.delete()
+        dm = await ctx.message.author.send("Please select one of the following catagorys.")
+        msg = await self.bot.wait_for('message', timeout=120, check=check)
+        dm = await ctx.message.author.send("Good")
+
 
 
 def setup(bot):
