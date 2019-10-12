@@ -9,6 +9,7 @@ from InfernalAdmin.bot import InfernalAdminClient
 
 cwd = Path(os.getcwd())
 parent = cwd.parent
+os.chdir(parent + "\\infernaladmin")
 print("---------------------------------------------")
 print("STARTING BOT IN ", cwd, "PARENT IS ", parent)
 print("---------------------------------------------")
