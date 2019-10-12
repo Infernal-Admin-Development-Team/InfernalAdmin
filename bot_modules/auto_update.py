@@ -7,11 +7,12 @@ import sys
 from github import Github
 from subprocess import check_call as run
 from util import *
+import subprocess
 
 def pull_and_reset(branch):
     print("Resetting")
-    update_cmd_1=" git init; git remote add origin https://github.com/PeterGibbs/InfernalAdmin.git; (git fetch --all); git reset --hard origin/"+branch+"; sleep(5); echo Resetting"
-    run(update_cmd_1)
+    subprocess.Popen("git init; git remote add origin https://github.com/PeterGibbs/InfernalAdmin.git; (git fetch --all); git reset --hard origin/"+branch+"; sleep(15); echo Finished")
+    
 
     print("done")
     sys.exit()
