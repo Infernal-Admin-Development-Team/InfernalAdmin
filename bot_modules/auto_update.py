@@ -11,7 +11,10 @@ import subprocess
 
 def pull_and_reset(branch):
     print("Resetting")
-    run("git init; git remote add origin https://github.com/PeterGibbs/InfernalAdmin.git; (git fetch --all); git reset --hard origin/"+branch+"; sleep(15); echo Finished")
+    run("git init")
+    run("git remote add origin https://github.com/PeterGibbs/InfernalAdmin.git")
+    run("git fetch --all")
+    run("git reset --hard origin/"+branch)
 
 
     print("done")
