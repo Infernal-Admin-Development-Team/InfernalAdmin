@@ -1,13 +1,12 @@
-from discord.ext.commands import Cog,command,check
-from discord.ext import commands
-from pathlib import Path
-from subprocess import check_call as run
-import os
-import sys
-from github import Github
-from subprocess import check_call as run
-from util import *
 import subprocess
+import sys
+
+from discord.ext import commands
+from discord.ext.commands import Cog, command, check
+from github import Github
+
+from util import *
+
 
 def pull_and_reset(branch):
     print("Resetting")
@@ -42,19 +41,9 @@ class AutoUpdate(Cog):
             ret_list.append(b.name)
         return ret_list
 
-    @command()
-    async def updateTest(self,ctx):
-        await ctx.send("aaa")
-
-    @command()
-    async def thisCommandDidNotExistBefore(self,ctx):
-        await ctx.send("aaa")
     @command(hidden=True)
     async def branches(self,ctx):
         """updates the bot"""
-        #print("aaa")
-
-
         out_str=" "
         branches=self.get_branch_names()
 
@@ -90,9 +79,6 @@ class AutoUpdate(Cog):
 
     @update.error
     async def update_error(self, ctx, error):
-
-        # if ctx.command==self.update:
-        #   return await ctx.send("update error"+error)
 
         if isinstance(error, commands.MissingRequiredArgument):
             return await ctx.send(error)
