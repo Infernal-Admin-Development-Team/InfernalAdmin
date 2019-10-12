@@ -12,7 +12,7 @@ import stat
 from time import sleep
 
 print("waiting for bot to die")
-sleep(6000)
+sleep(6)
 print("Starting update")
 def on_rm_error(func, path, exc_info):
     # path contains the path of the file that couldn't be removed
