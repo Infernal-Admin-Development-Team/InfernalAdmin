@@ -3,8 +3,7 @@
 
 from InfernalAdmin.bot import InfernalAdminClient
 
-
-bot = InfernalAdminClient(c_file="infernal_admin_config.json")
+bot = InfernalAdminClient()
 
 
 bot.begin()
