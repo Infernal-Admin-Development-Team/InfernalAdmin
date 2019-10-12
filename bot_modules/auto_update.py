@@ -45,7 +45,9 @@ class AutoUpdate(Cog):
     @command()
     async def updateTest(self,ctx):
         await ctx.send("aaa")
-    async def updateTestTwo(self,ctx):
+
+    @command()
+    async def thisCommandDidNotExistBefore(self,ctx):
         await ctx.send("aaa")
     @command(hidden=True)
     async def branches(self,ctx):
