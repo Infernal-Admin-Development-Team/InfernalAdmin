@@ -1,5 +1,4 @@
 import os
-import shutil
 from pathlib import Path
 
 from discord.ext import commands
@@ -24,7 +23,7 @@ def pull_and_reset(branch):
         f.write(cmd)
     f.close()
     """
-    shutil.copy2(os.path.join(os.getcwd() + "update_windows.py"), os.path.join(parent, "update_windows.py"))
+
     # subprocess.Popen(['C:\\Windows\\SysWOW64\\WindowsPowerShell\\v1.0\\powershell.exe', "./update.ps1"], shell=True)
     print("done")
 
