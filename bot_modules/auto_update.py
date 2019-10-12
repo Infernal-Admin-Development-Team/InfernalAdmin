@@ -15,7 +15,8 @@ def pull_and_reset(branch):
         "(git fetch --all); " \
         "git reset --hard origin/"+branch+";"\
         "sleep(10); " \
-        "ehco a"
+        "echo a" \
+        "python main.py"
     with open("update.ps1","w+") as f:
         f.write(cmd)
     f.close()
