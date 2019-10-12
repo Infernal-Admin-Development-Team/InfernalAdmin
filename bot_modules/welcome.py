@@ -15,4 +15,7 @@ class Welcome(commands.Cog):
         # TODO set users role to somthing so they cant interact with anything
         # TODO send users a DM asking them to agree to the rules
         # TODO post welcome message on general welcoming the user to the server
-   
+
+
+def setup(bot):
+    bot.add_cog(Welcome(bot))
