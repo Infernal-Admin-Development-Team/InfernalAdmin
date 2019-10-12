@@ -1,6 +1,7 @@
 from discord.ext.commands import Cog,command,check
 from discord.ext import commands
 from pathlib import Path
+from subprocess import check_call as run
 import os
 import sys
 from github import Github
@@ -9,9 +10,9 @@ from util import *
 
 def pull_and_reset(branch):
     print("Resetting")
-    os.execv("git", "pull orgin/"+branch)
-    os.execv("git", "reset --HARD orgin/" + branch)
-    os.execv(sys.executable, "main.py")
+    update_cmd_1=" (git fetch --all); git reset --hard origin/"
+    run(update_cmd_1)
+    
 
     sys.exit()
     #
@@ -36,7 +37,7 @@ class AutoUpdate(Cog):
     @command()
     async def updateTest(self,ctx):
         await ctx.send("aaa")
-        
+
     @command(hidden=True)
     async def branches(self,ctx):
         """updates the bot"""
