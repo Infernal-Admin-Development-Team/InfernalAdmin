@@ -2,11 +2,15 @@
 This is the main bot file
 """
 import json
-
+from collections import namedtuple
 from discord.ext import commands
-
+from util import CONFIG
 from bot_modules.welcome import Welcome
 from bot_modules.auto_update import AutoUpdate
+modules = {
+    'auto_update',
+    'welcome'
+}
 
 class InfernalAdminClient(commands.Bot):
     """
@@ -15,23 +19,17 @@ class InfernalAdminClient(commands.Bot):
     """
 
     def __init__(self, c_file, *args, **kwargs):
-        with open(c_file) as f:
-            self.config=json.load(f)
-        f.close()
-
-        super(InfernalAdminClient, self).__init__(command_prefix = commands.when_mentioned_or('$'),
-                                                  description='InfernalAdmin')
+        super().__init__(command_prefix=CONFIG.prefix, description=CONFIG.description,
+                        pm_help=None, help_attrs=dict(hidden=True), fetch_offline_members=False)
 
 
 
-
-
-        self.add_cog(AutoUpdate(self))
         self.event(self.on_ready)
 
         # self.bg_task = self.loop.create_task(self.my_background_task())
 
-
+        for module in modules:
+            self.load_extension("bot_modules."+module)
 
     async def on_ready(self):
 
@@ -45,5 +43,5 @@ class InfernalAdminClient(commands.Bot):
 
     def begin(self):
 
-        self.run(self.config['token'])
+        self.run(CONFIG.token)
 
