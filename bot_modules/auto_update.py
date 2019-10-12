@@ -21,6 +21,8 @@ def pull_and_reset(branch,bot):
     f.close()
 
     print("done")
+
+    await bot.close()
     sys.exit()
     #
 
@@ -77,8 +79,8 @@ class AutoUpdate(Cog):
         msg = await self.bot.wait_for('message', timeout=20, check=check)
         if "y" in msg.content:
             await ctx.send("Updating to ``" + branch + "``")
-            await self.bot.close()
-            pull_and_reset(branch)
+
+            pull_and_reset(branch,self.bot)
         else:
             await ctx.send("update cancled")
 
