@@ -9,7 +9,9 @@ from InfernalAdmin.bot import InfernalAdminClient
 
 cwd = Path(os.getcwd())
 parent = cwd.parent
-
+print("---------------------------------------------")
+print("STARTING BOT IN ", cwd, "PARENT IS ", parent)
+print("---------------------------------------------")
 shutil.copy(str(os.getcwd()) + "\\update_windows.py", str(parent) + "\\update_windows.py")
 bot = InfernalAdminClient()
 
