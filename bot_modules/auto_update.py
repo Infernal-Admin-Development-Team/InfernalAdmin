@@ -53,9 +53,6 @@ class AutoUpdate(Cog):
         return ret_list
 
     @command()
-    async def test(self, ctx):
-        ctx.send("eee")
-    @command()
     async def branches(self,ctx):
         """->Gets the branches from the github repo"""
         out_str=" "
