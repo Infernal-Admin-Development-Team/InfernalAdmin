@@ -41,9 +41,9 @@ class AutoUpdate(Cog):
             ret_list.append(b.name)
         return ret_list
 
-    @command(hidden=True)
+    @command()
     async def branches(self,ctx):
-        """updates the bot"""
+        """->Gets the branches from the github repo"""
         out_str=" "
         branches=self.get_branch_names()
 
@@ -55,7 +55,7 @@ class AutoUpdate(Cog):
     @commands.command()
     @check(is_owner)
     async def update(self, ctx, branch: str):
-        """Causes the bot to update its local files to match the branch of your choosing"""
+        """->Causes the bot to update its local files to match the branch of your choosing"""
 
         def check(m):
             return m.author == ctx.message.author and m.channel == ctx.message.channel

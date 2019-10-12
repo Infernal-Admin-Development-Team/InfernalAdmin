@@ -11,7 +11,7 @@ class Reporting(Cog):
 
     @command()
     async def report(self, ctx):
-        """Submits a report to the admins"""
+        """->Submits a report to the admins"""
         reporter = ctx.message.author
 
         def check(m):
