@@ -2,7 +2,7 @@ from discord.ext.commands import Cog
 
 
 class ServerControl(Cog):
-    """"Soon to be analytics module"""
+    """"General propose module for managing roles, spamming, bot permissions.etc"""
 
     def __init__(self, bot):
         self.bot = bot
