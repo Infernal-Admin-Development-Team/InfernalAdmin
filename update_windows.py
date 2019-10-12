@@ -9,8 +9,11 @@ parent = cwd.parent
 protected_files = []
 import shutil
 import stat
+from time import sleep
 
-
+print("waiting for bot to die")
+sleep(6000)
+print("Starting update")
 def on_rm_error(func, path, exc_info):
     # path contains the path of the file that couldn't be removed
     # let's just assume that it's read-only and unlink it.
