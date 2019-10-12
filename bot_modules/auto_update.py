@@ -2,12 +2,20 @@ from discord.ext.commands import Cog,command,check
 from discord.ext import commands
 from pathlib import Path
 import os
+import sys
 from github import Github
 from subprocess import check_call as run
 from util import *
-class CogEx(Cog):
-    def __init__(self,bot):
-        super().__init__(bot)
+
+def pull_and_reset(branch):
+    print("Resetting")
+    os.execv("git", "pull orgin/"+branch)
+    os.execv("git", "reset --HARD orgin/" + branch)
+    os.execv(sys.executable, "main.py")
+
+    sys.exit()
+    #
+
 
 
 class AutoUpdate(Cog):
@@ -17,59 +25,65 @@ class AutoUpdate(Cog):
 
         self.bot = bot
 
-
-
+    def get_branch_names(self):
+        g = Github()
+        repo = g.get_repo(CONFIG.version_control.repo)
+        ret_list =[]
+        for b in repo.get_branches():
+            ret_list.append(b.name)
+        return ret_list
 
 
     @command(hidden=True)
     async def branches(self,ctx):
         """updates the bot"""
         #print("aaa")
-        g=Github()
-        repo = g.get_repo(self.bot.config.version_control.repo)
-        branches=list(repo.get_branches())
-        cwd = Path(os.getcwd())
+
+
         out_str=" "
+        branches=self.get_branch_names()
+
         for b in branches:
-            out_str+=b.name+"\n "
+            out_str+=b+"\n "
         await ctx.send("There are "+str(len(branches))+" branches\n```"+out_str+"```")
 
 
 
 
-
-    @command(hidden=True)
+    @commands.command()
     @check(is_owner)
-    async def update(self,ctx,branch:str):
-            """Causes the bot to update its local files to match the branch of your choosing"""
-            
-            def check(m):
-                return m.author==ctx.message.author and m.channel==ctx.message.channel
+    async def update(self, ctx, branch: str):
+        """Causes the bot to update its local files to match the branch of your choosing"""
 
-            await ctx.send("Are you sure you want to update the bot to ``" + branch + "``")
+        def check(m):
+            return m.author == ctx.message.author and m.channel == ctx.message.channel
 
-            msg= await self.bot.wait_for('message',timeout=5, check=check)
-            if "y" in msg.content:
-                await ctx.send("Updating to ``"+branch+"``")
-            else:
-                await ctx.send("update cancled")
+        if branch not in self.get_branch_names():
+            return await ctx.send("Invalid branch")
 
+        reply = await ctx.send("Are you sure you want to update the bot to ``" + branch + "``")
+        setattr(ctx, 'reply', reply)
+        msg = await self.bot.wait_for('message', timeout=20, check=check)
+        if "y" in msg.content:
+            await ctx.send("Updating to ``" + branch + "``")
 
-    async def cog_command_error(self, ctx, error):
+            pull_and_reset(branch)
+        else:
+            await ctx.send("update cancled")
 
+    @update.error
+    async def update_error(self, ctx, error):
 
-        #if ctx.command==self.update:
+        # if ctx.command==self.update:
         #   return await ctx.send("update error"+error)
 
         if isinstance(error, commands.MissingRequiredArgument):
             return await ctx.send(error)
-        if isinstance(error,commands.CommandInvokeError):
+        if isinstance(error, commands.CommandInvokeError):
             if error.original.__class__.__name__ == "TimeoutError":
-                return await ctx.message.rea("GB")
-            #return await ctx.send(error.original)
-        #return await ctx.send(str(error.original))
-        #if str(error.origional)=="TimeoutError":
-        #    return await ctx.send(":clock1:")
+                await ctx.message.add_reaction("💤")
+                await getattr(ctx, "reply").delete()
+                return
 
 def setup(bot):
     bot.add_cog(AutoUpdate(bot))
