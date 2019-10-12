@@ -52,7 +52,7 @@ subprocess.call(["pip", "install", "--src", os.getcwd(), "-e", branch_Path], she
 subprocess.call(["pip", "install", "-U", "-r", os.path.join(os.getcwd(), 'InfernalAdmin/requirements.txt')], shell=True)
 
 move_protected_back()
-os.chdir(parent + "\\infernaladmin")
+os.chdir(str(parent) + "\\infernaladmin")
 subprocess.Popen(["python", os.path.join(os.getcwd(), 'InfernalAdmin/main.py')], shell=True)
 print("exiting updater")
 exit(0)

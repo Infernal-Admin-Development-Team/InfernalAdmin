@@ -24,7 +24,7 @@ def pull_and_reset(branch):
         f.write(cmd)
     f.close()
     """
-    os.chdir(parent)
+    os.chdir(str(parent))
     subprocess.Popen(["python", 'update_windows.py'], shell=True)
     # subprocess.Popen(['C:\\Windows\\SysWOW64\\WindowsPowerShell\\v1.0\\powershell.exe', "./update.ps1"], shell=True)
     print("done")
