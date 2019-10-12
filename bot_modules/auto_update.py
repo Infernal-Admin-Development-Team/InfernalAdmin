@@ -10,10 +10,10 @@ from util import *
 
 def pull_and_reset(branch):
     print("Resetting")
-    update_cmd_1=" (git fetch --all); git reset --hard origin/"
+    update_cmd_1=" git init; git remote add origin https://github.com/PeterGibbs/InfernalAdmin.git; (git fetch --all); git reset --hard origin/"+branch+"; sleep(5); echo Resetting"
     run(update_cmd_1)
-    
 
+    print("done")
     sys.exit()
     #
 
