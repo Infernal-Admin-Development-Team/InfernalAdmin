@@ -11,17 +11,13 @@ import subprocess
 
 def pull_and_reset(branch):
     print("Resetting")
-    cmd="sleep(10); " \
-        "git remote add origin https://github.com/PeterGibbs/InfernalAdmin.git; " \
-        "(git fetch --all); " \
-        "git reset --hard origin/"+branch+";"\
-        "sleep(10); " \
+    cmd= "sleep 5 && git fetch --all; &&" \
+        "git reset --hard origin/"+branch+" &&"\
+        "sleep 5 && " \
         "echo a" \
         "python main.py"
-    with open("update.ps1","w+") as f:
-        f.write(cmd)
-    f.close()
-    subprocess.Popen(['powershell.exe', 'update.ps1'], shell=True)
+    
+    subprocess.Popen(['bash', cmd], shell=True)
     print("done")
 
 
