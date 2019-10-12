@@ -52,8 +52,6 @@ class AutoUpdate(Cog):
         await ctx.send("There are "+str(len(branches))+" branches\n```"+out_str+"```")
 
 
-
-
     @commands.command()
     @check(is_owner)
     async def update(self, ctx, branch: str):
