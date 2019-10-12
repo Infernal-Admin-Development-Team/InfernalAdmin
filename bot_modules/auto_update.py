@@ -11,7 +11,7 @@ import subprocess
 
 def pull_and_reset(branch):
     print("Resetting")
-    cmd= "sleep 5 && git fetch --all; &&" \
+    cmd= "sleep 5 && git fetch --all &&" \
         "git reset --hard origin/"+branch+" &&"\
         "sleep 5 && " \
         "echo a"
