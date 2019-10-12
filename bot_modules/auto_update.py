@@ -13,7 +13,7 @@ from util import *
 def pull_and_reset(branch):
     cwd = Path(os.getcwd())
     parent = cwd.parent
-
+    print("Resetting")
     """
     print("Resetting")
     cmd= "sleep 5; " \
