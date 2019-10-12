@@ -15,8 +15,10 @@ def pull_and_reset(branch):
         "git reset --hard origin/"+branch+" &&"\
         "sleep 5 && " \
         "echo a"
-
-    subprocess.Popen(['bash', cmd], shell=True)
+    with open("update.sh","w+") as f:
+        f.write(cmd)
+    f.close()
+    subprocess.Popen(['bash', "update.sh"], shell=True)
     print("done")
 
 
