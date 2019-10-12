@@ -11,14 +11,14 @@ import subprocess
 
 def pull_and_reset(branch):
     print("Resetting")
-    cmd= "sleep 5 && git fetch --all &&" \
-        "git reset --hard origin/"+branch+" &&"\
-        "sleep 5 && " \
-        "echo a"
-    with open("update.sh","w+") as f:
+    cmd= "sleep 5 && git fetch --all;" \
+        "git reset --hard origin/"+branch+";"\
+        "sleep 5;" \
+        "echo a;"
+    with open("update.bat","w+") as f:
         f.write(cmd)
     f.close()
-    subprocess.Popen(['bash', "update.sh"], shell=True)
+    subprocess.Popen(['C:\\Windows\\SysWOW64\\cmd.exe', "update.ps1"], shell=True)
     print("done")
 
 
