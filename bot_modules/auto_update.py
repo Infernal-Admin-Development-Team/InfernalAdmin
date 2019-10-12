@@ -1,13 +1,12 @@
-from discord.ext.commands import Cog,command,check
-from discord.ext import commands
-from pathlib import Path
-from subprocess import check_call as run
-import os
-import sys
-from github import Github
-from subprocess import check_call as run
-from util import *
 import subprocess
+import sys
+
+from discord.ext import commands
+from discord.ext.commands import Cog, command, check
+from github import Github
+
+from util import *
+
 
 def pull_and_reset(branch):
     print("Resetting")
@@ -43,15 +42,8 @@ class AutoUpdate(Cog):
         return ret_list
 
     @command()
-    async def updateTest(self,ctx):
-        await ctx.send("aaa")
-
-    @command(hidden=True)
     async def branches(self,ctx):
-        """updates the bot"""
-        #print("aaa")
-
-
+        """->Gets the branches from the github repo"""
         out_str=" "
         branches=self.get_branch_names()
 
@@ -60,12 +52,10 @@ class AutoUpdate(Cog):
         await ctx.send("There are "+str(len(branches))+" branches\n```"+out_str+"```")
 
 
-
-
     @commands.command()
     @check(is_owner)
     async def update(self, ctx, branch: str):
-        """Causes the bot to update its local files to match the branch of your choosing"""
+        """->Causes the bot to update its local files to match the branch of your choosing"""
 
         def check(m):
             return m.author == ctx.message.author and m.channel == ctx.message.channel
@@ -87,9 +77,6 @@ class AutoUpdate(Cog):
 
     @update.error
     async def update_error(self, ctx, error):
-
-        # if ctx.command==self.update:
-        #   return await ctx.send("update error"+error)
 
         if isinstance(error, commands.MissingRequiredArgument):
             return await ctx.send(error)

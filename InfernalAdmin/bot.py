@@ -1,15 +1,16 @@
 """
 This is the main bot file
 """
-import json
-from collections import namedtuple
 from discord.ext import commands
+
 from util import CONFIG
-from bot_modules.welcome import Welcome
-from bot_modules.auto_update import AutoUpdate
+
 modules = {
     'auto_update',
-    'welcome'
+    'welcome',
+    'reporting',
+    'analytics',
+    'server_control'
 }
 
 class InfernalAdminClient(commands.Bot):
