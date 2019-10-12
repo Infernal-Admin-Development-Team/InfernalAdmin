@@ -50,4 +50,4 @@ subprocess.call(["pip", "install", "-U", "-r", os.path.join(os.getcwd(), 'Infern
 
 move_protected_back()
 
-subprocess.Popen(["python", os.path.join(os.getcwd(), 'InfernalAdmin/main.py')], shell=True)
+subprocess.call(["python", os.path.join(os.getcwd(), 'InfernalAdmin/main.py')], shell=True)
