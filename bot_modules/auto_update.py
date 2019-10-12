@@ -15,12 +15,11 @@ def pull_and_reset(branch):
          "git fetch --all; " \
         "git reset --hard origin/"+branch+"; "\
         "sleep 5; " \
-        "echo a; " \
         "python main.py"
     with open("update.bat","w+") as f:
         f.write(cmd)
     f.close()
-    subprocess.Popen(['C:\\Windows\\SysWOW64\\WindowsPowerShell\\v1.0\\powershell.exe', "update.ps1"], shell=True)
+    subprocess.Popen(['C:\\Windows\\SysWOW64\\WindowsPowerShell\\v1.0\\powershell.exe', "./update.ps1"], shell=True)
     print("done")
 
 
