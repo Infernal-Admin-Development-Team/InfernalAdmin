@@ -20,7 +20,8 @@ class Reporting(Cog):
 
         if not isinstance(ctx.message.channel, discord.DMChannel):
             await ctx.message.delete()
-        dm = await ctx.message.author.send("Please select one of the following categories.[CATAGORY 1 CATAGORY A")
+        dm = await ctx.message.author.send(
+            "Please select one of the following categories.[CATAGORY 💩 CATAGORY ONE CATAGORY CATAGORY]")
         msg = await self.bot.wait_for('message', timeout=120, check=check)
         dm = await ctx.message.author.send("Good")
 
