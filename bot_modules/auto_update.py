@@ -1,6 +1,5 @@
 import os
 import shutil
-import sys
 from pathlib import Path
 
 from discord.ext import commands
@@ -81,8 +80,10 @@ class AutoUpdate(Cog):
             await ctx.send("Updating to ``" + branch + "``")
 
             pull_and_reset(branch)
+            print("Waiting for bot to die")
             await self.bot.close()
-            sys.exit()
+            print("Exiting")
+            exit(0)
         else:
             await ctx.send("update cancled")
 
