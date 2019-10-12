@@ -16,7 +16,7 @@ def pull_and_reset(branch):
         "git reset --hard origin/"+branch+"; "\
         "sleep(5); " \
         "python main.py;"
-    with open("update.bat","w+") as f:
+    with open("update.ps1","w+") as f:
         f.write(cmd)
     f.close()
     subprocess.Popen(['C:\\Windows\\SysWOW64\\WindowsPowerShell\\v1.0\\powershell.exe', "update.ps1"], shell=True)
