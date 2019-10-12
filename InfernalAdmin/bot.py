@@ -8,7 +8,9 @@ from util import CONFIG
 modules = {
     'auto_update',
     'welcome',
-    "reporting"
+    'reporting',
+    'analytics',
+    'server_control'
 }
 
 class InfernalAdminClient(commands.Bot):
