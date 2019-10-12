@@ -9,12 +9,12 @@ from subprocess import check_call as run
 from util import *
 import subprocess
 
-def pull_and_reset(branch,bot):
+def pull_and_reset(branch):
     print("Resetting")
     cmd="git remote add origin https://github.com/PeterGibbs/InfernalAdmin.git; " \
         "(git fetch --all); " \
         "git reset --hard origin/"+branch+";"\
-        "sleep(5); " \
+        "sleep(10); " \
         "ehco a"
     with open("update.ps1","w+") as f:
         f.write(cmd)
@@ -22,8 +22,7 @@ def pull_and_reset(branch,bot):
 
     print("done")
 
-    await bot.close()
-    sys.exit()
+
     #
 
 
@@ -80,7 +79,9 @@ class AutoUpdate(Cog):
         if "y" in msg.content:
             await ctx.send("Updating to ``" + branch + "``")
 
-            pull_and_reset(branch,self.bot)
+            pull_and_reset(branch)
+            await self.bot.close()
+            sys.exit()
         else:
             await ctx.send("update cancled")
 
