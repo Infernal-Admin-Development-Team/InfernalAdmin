@@ -21,7 +21,7 @@ def pull_and_reset(branch):
     with open("update.ps1","w+") as f:
         f.write(cmd)
     f.close()
-    subprocess.Popen('.\\update.ps1', shell=True)
+    subprocess.Popen(['powershell.exe', 'update.ps1'], shell=True)
     print("done")
 
 
