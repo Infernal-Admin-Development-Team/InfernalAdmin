@@ -19,7 +19,7 @@ class InfernalAdminClient(commands.Bot):
     This defines the main entry points for messages
     """
 
-    def __init__(self, c_file, *args, **kwargs):
+    def __init__(self, *args, **kwargs):
         super().__init__(command_prefix=CONFIG.prefix, description=CONFIG.description,
                         pm_help=None, help_attrs=dict(hidden=True), fetch_offline_members=False)
 
