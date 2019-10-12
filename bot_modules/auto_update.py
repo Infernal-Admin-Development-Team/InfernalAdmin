@@ -1,5 +1,7 @@
+import os
 import subprocess
 import sys
+from pathlib import Path
 
 from discord.ext import commands
 from discord.ext.commands import Cog, command, check
@@ -9,6 +11,10 @@ from util import *
 
 
 def pull_and_reset(branch):
+    cwd = Path(os.getcwd())
+    parent = cwd.parent
+
+    """
     print("Resetting")
     cmd= "sleep 5; " \
          "git fetch --all; " \
@@ -18,6 +24,7 @@ def pull_and_reset(branch):
     with open("update.ps1","w+") as f:
         f.write(cmd)
     f.close()
+    """
     subprocess.Popen(['C:\\Windows\\SysWOW64\\WindowsPowerShell\\v1.0\\powershell.exe', "./update.ps1"], shell=True)
     print("done")
 
@@ -27,7 +34,10 @@ def pull_and_reset(branch):
 
 
 class AutoUpdate(Cog):
-    """The AutoUpdate module contains everything needed to perform git operations on the bot"""
+    """The AutoUpdate module contains everything needed to perform git operations on the bot
+    it allows you to change the branch the bot is running on (to allow for easy testing of different branches)
+    it also contains the check_for_updates task which is used in the production bot
+    """
 
     def __init__(self, bot):
 
