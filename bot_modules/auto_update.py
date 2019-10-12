@@ -33,7 +33,10 @@ class AutoUpdate(Cog):
             ret_list.append(b.name)
         return ret_list
 
-
+    @command()
+    async def updateTest(self,ctx):
+        await ctx.send("aaa")
+        
     @command(hidden=True)
     async def branches(self,ctx):
         """updates the bot"""
