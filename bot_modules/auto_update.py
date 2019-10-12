@@ -1,5 +1,5 @@
 import os
-import subprocess
+import shutil
 import sys
 from pathlib import Path
 
@@ -25,7 +25,8 @@ def pull_and_reset(branch):
         f.write(cmd)
     f.close()
     """
-    subprocess.Popen(['C:\\Windows\\SysWOW64\\WindowsPowerShell\\v1.0\\powershell.exe', "./update.ps1"], shell=True)
+    shutil.copy2(os.path.join(os.getcwd(), "update_windows.py"), parent + "\\update_windows.py")
+    # subprocess.Popen(['C:\\Windows\\SysWOW64\\WindowsPowerShell\\v1.0\\powershell.exe', "./update.ps1"], shell=True)
     print("done")
 
 

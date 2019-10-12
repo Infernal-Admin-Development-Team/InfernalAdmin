@@ -49,3 +49,5 @@ subprocess.call(["pip", "install", "--src", os.getcwd(), "-e", branch_Path], she
 subprocess.call(["pip", "install", "-U", "-r", os.path.join(os.getcwd(), 'InfernalAdmin/requirements.txt')], shell=True)
 
 move_protected_back()
+
+subprocess.Popen(["python", os.path.join(os.getcwd(), 'InfernalAdmin/main.py')], shell=True)
