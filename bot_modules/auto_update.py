@@ -18,7 +18,7 @@ def pull_and_reset(branch):
         "ehco a"
     with open("update.ps1") as f:
         f.write(cmd)
-    
+    f.close()
 
     print("done")
     sys.exit()
