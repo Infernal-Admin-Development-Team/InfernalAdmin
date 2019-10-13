@@ -46,7 +46,7 @@ else:
 
 branch = sys.argv[1]
 print("BRANCH IS :", branch)
-branch_Path = "git+https://github.com/PeterGibbs/InfernalAdmin.git@origin/" + branch + "#egg=InfernalAdmin"
+branch_Path = "git+https://github.com/Infernal-Admin-Development-Team/InfernalAdmin.git@origin/" + branch + "#egg=InfernalAdmin"
 subprocess.call(["pip", "install", "--src", os.getcwd(), "-e", branch_Path], shell=True)
 
 subprocess.call(["pip", "install", "-U", "-r", os.path.join(os.getcwd(), 'InfernalAdmin/requirements.txt')], shell=True)
