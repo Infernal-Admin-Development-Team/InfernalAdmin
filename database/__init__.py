@@ -17,7 +17,6 @@ class Report(Base):
     poster_id = Column(Integer)
     offender_id = Column(Integer)
     content = Column(String)
-    references = Column()
 
 
 class Reference(Base):
