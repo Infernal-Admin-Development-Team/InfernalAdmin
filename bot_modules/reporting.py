@@ -34,7 +34,8 @@ class Reporting(Cog):
         p = Report(poster_id=poster_id, offender_id=offender_id, content=content, category=category)
         s.add(p)
         s.flush()
-
+        for m in references:
+            print(m.content)
         s.commit()
         s.close()
 
