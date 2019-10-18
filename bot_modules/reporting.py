@@ -16,17 +16,28 @@ class Reporting(Cog):
                               "harrasssment",
                               "server issue"]
 
-    async def file_report(self, category, poster_id, offender_id, content, references):
+    async def print_report_to_server(self, report_id):
+        """
+        Checks if the report has its own channel, if not it creates one
+        Will populate the channel with the initial report info
+        """
         server = self.bot.get_guild(CONFIG.server)
+        channel = None
+        for c in server.channels:
+            if c.id == CONFIG.reports_category:
+                channel = await server.create_text_channel("report_" + str(report_id), category=c)
+                break
+
+    async def file_report(self, category, poster_id, offender_id, content, references):
+
         s = session()
         p = Report(poster_id=poster_id, offender_id=offender_id, content=content, category=category)
-        # s.add(p)
-        # s.commit()
+        s.add(p)
+        s.flush()
+
+        s.commit()
         s.close()
-        for c in server.channels:
-            print(c.name)
-            if c.id == CONFIG.reports_category:
-                await server.create_text_channel("test", category=c)
+
 
     @command()
     async def report(self, ctx):
@@ -75,14 +86,20 @@ class Reporting(Cog):
                                       "You can post screenshots here, but try not to.\n"
                                       "You will be able to paste messages for evidence in the next step\n"
                                       "say \"done\" when you are done")
-
+        report_content = []
         while True:
             msg = await self.bot.wait_for('message', timeout=120, check=check)
             if msg.content == "done":
                 break
             else:
-                report_text += msg.content + "\n"
-
+                report_content.append(msg)
+        report_refrences = []
+        while True:
+            msg = await self.bot.wait_for('message', timeout=120, check=check)
+            if msg.content == "done":
+                break
+            else:
+                report_content.append(msg)
         await ctx.message.author.send("sending report")
         await ctx.message.author.send("Your report ```" + report_text + "```")
 
