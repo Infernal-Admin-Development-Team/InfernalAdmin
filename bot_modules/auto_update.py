@@ -40,6 +40,9 @@ class AutoUpdate(Cog):
         return ret_list
 
     @command()
+    async def bogas(self, ctx):
+        await ctx.send("bogas")
+    @command()
     async def branches(self, ctx):
         """->Gets the branches from the github repo"""
         out_str = " "
