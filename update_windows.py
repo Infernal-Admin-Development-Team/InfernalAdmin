@@ -29,12 +29,12 @@ def copy_protected():
         for f in file_list:
             protected_files.append(f.replace('\n', ""))
         for f in protected_files:
-            shutil.copy2(os.path.join(os.getcwd(), "InfernalAdmin/" + f), os.getcwd() + "/" + f)
+            shutil.copy2(os.path.join(os.getcwd(), "InfernalAdmin\\" + f), os.getcwd() + "\\" + f)
 
 
 def move_protected_back():
     for f in protected_files:
-        shutil.copy2(os.getcwd() + "/" + f, os.path.join(os.getcwd(), "InfernalAdmin/" + f))
+        shutil.copy2(os.getcwd() + "\\" + f, os.path.join(os.getcwd(), "InfernalAdmin\\" + f))
 
 if Path(os.path.join(os.getcwd()), 'InfernalAdmin').exists():
     print("Path exists")

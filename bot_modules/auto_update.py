@@ -17,8 +17,9 @@ def pull_updates(branch):
     os.chdir(str(parent))
     if CONFIG.os == "windows":
         subprocess.Popen(["python", 'update_windows.py', branch], shell=True)
-    else:
-        subprocess.Popen(["python", 'update_linux.py', branch], shell=True)
+    with open("branch.txt", "w+") as f:
+        f.write(branch)
+
 
 class AutoUpdate(Cog):
     """The AutoUpdate module contains everything needed to perform git operations on the bot
