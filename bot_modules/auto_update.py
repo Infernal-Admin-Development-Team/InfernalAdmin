@@ -19,6 +19,7 @@ def pull_updates(branch):
         subprocess.Popen(["python", 'update_windows.py', branch], shell=True)
     with open("branch.txt", "w+") as f:
         f.write(branch)
+    f.close()
 
 
 class AutoUpdate(Cog):
