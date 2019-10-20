@@ -11,8 +11,8 @@ parent = cwd.parent
 print("------------------------------------------------------------------------------------------")
 print("STARTING BOT IN ", cwd)
 print("------------------------------------------------------------------------------------------")
-shutil.copy(str(os.getcwd()) + "\\update_windows.py", str(parent) + "\\update_windows.py")
-
+shutil.copy(str(os.getcwd()) + "/update_windows.py", str(parent) + "/update_windows.py")
+shutil.copy(str(os.getcwd()) + "/update_linux.py", str(parent) + "/update_linux.py")
 bot = InfernalAdminClient()
 bot.begin()
 

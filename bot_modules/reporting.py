@@ -9,7 +9,7 @@ class Reporting(Cog):
 
     def __init__(self, bot):
         self.bot = bot
-        self.catagory_list = ["admin abuse",
+        self.category_list = ["admin abuse",
                               "dispute between users",
                               "spam",
                               "bot abuse",
@@ -34,8 +34,6 @@ class Reporting(Cog):
         p = Report(poster_id=poster_id, offender_id=offender_id, content=content, category=category)
         s.add(p)
         s.flush()
-        for m in references:
-            print(m.content)
         s.commit()
         s.close()
 
@@ -67,11 +65,11 @@ class Reporting(Cog):
             "Server Issue```")
 
         msg = await self.bot.wait_for('message', timeout=120, check=check)
-        while msg.content.lower() not in self.catagory_list:
+        while msg.content.lower() not in self.category_list:
             await ctx.message.author.send("Invalid category please try again.")
             msg = await self.bot.wait_for('message', timeout=120, check=check)
 
-        selected_category = self.catagory_list.index(msg.content.lower())
+        selected_category = self.category_list.index(msg.content.lower())
 
         await ctx.message.author.send("Was there an offender?(y/n)")
         msg = await self.bot.wait_for('message', timeout=120, check=check)
