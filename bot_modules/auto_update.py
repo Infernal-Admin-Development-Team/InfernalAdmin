@@ -12,10 +12,11 @@ from util import *
 def pull_updates(branch):
     """Kicks off the update script"""
     # TODO add linux update handler
-    cwd = Path(os.getcwd())
-    parent = cwd.parent
-    os.chdir(str(parent))
+
     if CONFIG.os == "windows":
+        cwd = Path(os.getcwd())
+        parent = cwd.parent
+        os.chdir(str(parent))
         subprocess.Popen(["python", 'update_windows.py', branch], shell=True)
     with open("branch.txt", "w+") as f:
         f.write(branch)
