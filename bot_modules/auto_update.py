@@ -12,11 +12,15 @@ from util import *
 def pull_updates(branch):
     """Kicks off the update script"""
     # TODO add linux update handler
-    cwd = Path(os.getcwd())
-    parent = cwd.parent
 
-    os.chdir(str(parent))
-    subprocess.Popen(["python", 'update_windows.py', branch], shell=True)
+    if CONFIG.os == "windows":
+        cwd = Path(os.getcwd())
+        parent = cwd.parent
+        os.chdir(str(parent))
+        subprocess.Popen(["python", 'update_windows.py', branch], shell=True)
+    with open("branch.txt", "w+") as f:
+        f.write(branch)
+    f.close()
 
 
 class AutoUpdate(Cog):
@@ -63,7 +67,6 @@ class AutoUpdate(Cog):
         msg = await self.bot.wait_for('message', timeout=20, check=check)
 
         if "y" in msg.content:
-
             # kick off the update script and die
             await ctx.send("Updating to ``" + branch + "``")
             pull_updates(branch)
