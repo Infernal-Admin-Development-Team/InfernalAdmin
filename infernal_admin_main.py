@@ -15,6 +15,6 @@ if CONFIG.os == "windows":
     print("STARTING BOT IN ", cwd)
     print("------------------------------------------------------------------------------------------")
     shutil.copy(str(os.getcwd()) + "/update_windows.py", str(parent) + "/update_windows.py")
+
 bot = InfernalAdminClient()
 bot.begin()
-
