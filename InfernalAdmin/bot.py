@@ -24,6 +24,9 @@ class InfernalAdminClient(commands.Bot):
 
         self.activities = [Activity(name="with fire", type=discord.ActivityType.playing),
                            Activity(name="Pompanomike closely", type=discord.ActivityType.watching),
+                           Activity(name="$help", type=discord.ActivityType.playing),
+                           Activity(name="mispaling to motivate mike to join the project.",
+                                    type=discord.ActivityType.playing),
                            Activity(name="CHRIS NOISES", type=discord.ActivityType.listening)]
         self.event(self.on_ready)
         modules = [f for f in os.listdir("bot_modules") if isfile(join("bot_modules", f))]
