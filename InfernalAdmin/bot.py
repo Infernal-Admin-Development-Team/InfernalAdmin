@@ -55,7 +55,7 @@ class InfernalAdminClient(commands.Bot):
         while True:
             for activity in self.activities:
                 await self.change_presence(activity=activity)
-                await asyncio.sleep(10)
+                await asyncio.sleep(20)
 
 
 
