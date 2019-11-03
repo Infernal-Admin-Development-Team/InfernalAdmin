@@ -1,4 +1,4 @@
-from sqlalchemy import Column, String, Integer, ForeignKey, DateTime, Boolean
+from sqlalchemy import Column, String, Integer, BigInteger, ForeignKey, DateTime, Boolean
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
@@ -14,27 +14,33 @@ class Report(Base):
     id = Column(Integer, primary_key=True)
     category = Column(String)
     status = Column(Integer)  # 0->Open 1->IN_PROGRESS 2->Resolved 3->Rejected
-    poster_id = Column(Integer)
-    offender_id = Column(Integer)
+    poster_id = Column(BigInteger)
+    offender_id = Column(BigInteger)
     content = Column(String)
+    # offending_Messages = relationship("Message")
+
 
 class Message(Base):
     """Same as discord message"""
     __tablename__ = 'message'
     id = Column(Integer, primary_key=True)
-    channel = Column(Integer)
-    author = Column(Integer)
+    channel = Column(BigInteger)
+    author = Column(BigInteger)
     content = Column(String)
     timestamp = Column(DateTime)
+    attachments = relationship("Attachment")
 
 
 class Attachment(Base):
     """Attachment used for a message"""
     __tablename__ = 'message_attachment'
     id = Column(Integer, primary_key=True)
+    message_id = Column(Integer, ForeignKey('message.id'))
+    file_link = Column(String)
     file_path = Column(String)
-    message_id = ForeignKey(Message.id)
-    message = relationship(Message)
+    is_local = Column(Boolean)
+
+    #message = relationship(Message)
 
 
 class Reference(Base):
@@ -43,8 +49,6 @@ class Reference(Base):
     id = Column(Integer, primary_key=True)
     message_id = ForeignKey(Message.id)
     report_id = ForeignKey(Report.id)
-    message = relationship(Message)
-    report = relationship(Report)
 
 
 class ReportContent(Base):
@@ -53,8 +57,8 @@ class ReportContent(Base):
     id = Column(Integer, primary_key=True)
     message_id = ForeignKey(Message.id)
     report_id = ForeignKey(Report.id)
-    message = relationship(Message)
-    report = relationship(Report)
+    # message = relationship(Message)
+    #report = relationship(Report)
 
 
 class ReportComment(Base):
@@ -63,9 +67,10 @@ class ReportComment(Base):
     id = Column(Integer, primary_key=True)
     message_id = ForeignKey(Message.id)
     report_id = ForeignKey(Report.id)
-    message = relationship(Message)
-    report = relationship(Report)
+    # message = relationship(Message)
+    #report = relationship(Report)
     visible_to_poster = Column(Boolean)
+
 
 
 engine = create_engine(CONFIG.db.endpoint)
@@ -73,3 +78,14 @@ engine = create_engine(CONFIG.db.endpoint)
 session = sessionmaker()
 session.configure(bind=engine)
 Base.metadata.create_all(engine)
+
+
+def clear_db():
+    """Destroys the database."""
+    with engine.connect() as con:
+        con.execute("DROP TABLE report_comment;")
+        con.execute("DROP TABLE report_content;")
+        con.execute("DROP TABLE report_reference;")
+        con.execute("DROP TABLE message_attachment;")
+        con.execute("DROP TABLE message;")
+        con.execute("DROP TABLE report;")
