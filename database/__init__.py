@@ -17,7 +17,10 @@ class Report(Base):
     poster_id = Column(BigInteger)
     offender_id = Column(BigInteger)
     content = Column(String)
-    # offending_Messages = relationship("Message")
+    timestamp = Column(DateTime)
+    offending_Messages = relationship("Reference")
+    comments = relationship("ReportComment")
+    channel = Column(BigInteger)
 
 
 class Message(Base):
@@ -47,28 +50,19 @@ class Reference(Base):
     """Messages the user copies from the server to use as evidence"""
     __tablename__ = 'report_reference'
     id = Column(Integer, primary_key=True)
-    message_id = ForeignKey(Message.id)
-    report_id = ForeignKey(Report.id)
+    message_id = Column(Integer, ForeignKey('message.id'))
+    report_id = Column(Integer, ForeignKey('report.id'))
 
-
-class ReportContent(Base):
-    """Messages the user copies from the server to use as evidence"""
-    __tablename__ = 'report_content'
-    id = Column(Integer, primary_key=True)
-    message_id = ForeignKey(Message.id)
-    report_id = ForeignKey(Report.id)
-    # message = relationship(Message)
-    #report = relationship(Report)
 
 
 class ReportComment(Base):
     """Comments admins and the poster use to follow up on reports"""
     __tablename__ = 'report_comment'
     id = Column(Integer, primary_key=True)
-    message_id = ForeignKey(Message.id)
-    report_id = ForeignKey(Report.id)
-    # message = relationship(Message)
-    #report = relationship(Report)
+
+    message_id = Column(Integer, ForeignKey('message.id'))
+
+    report_id = Column(Integer, ForeignKey('report.id'))
     visible_to_poster = Column(Boolean)
 
 
@@ -84,7 +78,7 @@ def clear_db():
     """Destroys the database."""
     with engine.connect() as con:
         con.execute("DROP TABLE report_comment;")
-        con.execute("DROP TABLE report_content;")
+
         con.execute("DROP TABLE report_reference;")
         con.execute("DROP TABLE message_attachment;")
         con.execute("DROP TABLE message;")

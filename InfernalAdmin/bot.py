@@ -47,6 +47,8 @@ class InfernalAdminClient(commands.Bot):
         ctx = await self.get_context(message)
 
         if ctx.command is None:
+            if not isinstance(message.channel, discord.DMChannel):
+                db.record_message(message)
             return
 
         await self.invoke(ctx)
@@ -59,8 +61,6 @@ class InfernalAdminClient(commands.Bot):
         To make searching easier in the reporting system we save ALL messages in the DB.
         Unless they are tied to a report the messages are removed if they are older then 48 hours
         """
-        if not isinstance(m.channel, discord.DMChannel):
-            db.record_message(m)
 
         await self.process_commands(m)
 

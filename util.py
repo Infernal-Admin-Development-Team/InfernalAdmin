@@ -1,4 +1,5 @@
 import json
+import logging
 import random
 from collections import namedtuple
 
@@ -7,10 +8,25 @@ with open("config.json") as f:
     CONFIG=json.load(f, object_hook=lambda d: namedtuple('X', d.keys())(*d.values()))
 f.close()
 
+logger = logging.getLogger('discord')
+logger.setLevel(logging.ERROR)
+handler = logging.FileHandler(filename=CONFIG.logfile, encoding='utf-8', mode='w')
+handler.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
+logger.addHandler(handler)
 
 # Simple helper that can be called in the various modules
 def is_owner(ctx):
     return ctx.message.author.id == int(CONFIG.owner_id)
+
+
+def report_type_to_str(type):
+    types = ["admin abuse", "dispute between users", "spam", "bot abuse", "harrasssment", "server issue"]
+    return types[type]
+
+
+def report_status_to_str(status):
+    types = ["OPEN", "RESOLVED", "REJECTED", "IN PROGRESS"]
+    return types[status]
 
 
 class ActivityReader:
@@ -26,3 +42,4 @@ class ActivityReader:
         ret_num = int(activity[0])
         ret_str = activity[4:-2]
         return ret_num, ret_str
+
