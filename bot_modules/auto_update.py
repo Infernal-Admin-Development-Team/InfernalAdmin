@@ -6,7 +6,6 @@ from discord.ext import commands
 from discord.ext.commands import Cog, command, check
 from github import Github
 
-from database import clear_db
 from util import *
 
 
@@ -18,7 +17,7 @@ def pull_updates(branch):
         cwd = Path(os.getcwd())
         parent = cwd.parent
         os.chdir(str(parent))
-        clear_db()
+
         subprocess.Popen(["python", 'update_windows.py', branch], shell=True)
     with open("branch.txt", "w+") as f:
         f.write(branch)
@@ -70,6 +69,9 @@ class AutoUpdate(Cog):
 
         if "y" in msg.content:
             # kick off the update script and die
+            if CONFIG.os == "windows":
+                await ctx.send(
+                    "If your bot fails to start after the update please run cleardb.py in the bot folder and launch the bot again")
             await ctx.send("Updating to ``" + branch + "``")
             pull_updates(branch)
             await self.bot.close()
