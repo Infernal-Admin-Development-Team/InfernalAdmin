@@ -69,10 +69,11 @@ class AutoUpdate(Cog):
 
         if "y" in msg.content:
             # kick off the update script and die
+            await ctx.send("Updating to ``" + branch + "``")
             if CONFIG.os == "windows":
                 await ctx.send(
                     "If your bot fails to start after the update please run cleardb.py in the bot folder and launch the bot again")
-            await ctx.send("Updating to ``" + branch + "``")
+
             pull_updates(branch)
             await self.bot.close()
 
