@@ -6,6 +6,7 @@ from discord.ext import commands
 from discord.ext.commands import Cog, command, check
 from github import Github
 
+from database import clear_db
 from util import *
 
 
@@ -17,6 +18,7 @@ def pull_updates(branch):
         cwd = Path(os.getcwd())
         parent = cwd.parent
         os.chdir(str(parent))
+        clear_db()
         subprocess.Popen(["python", 'update_windows.py', branch], shell=True)
     with open("branch.txt", "w+") as f:
         f.write(branch)
