@@ -73,6 +73,21 @@ class ReportViewing(Cog):
         # reports = s.query(db.Report).filter(db.Report.poster_id == ctx.id)
         # s.close()
 
+    @command()
+    @check(can_view_reports)
+    async def clearreports(self, ctx):
+        """Clears the channels in the reports category"""
+        server = self.bot.get_guild(CONFIG.server)
+        s = db.session()
+        results = s.query(db.Report)
+        s.close()
+        for r in results:
+
+            if r.channel:
+                for c in server.channels:
+                    if c.id == r.channel:
+                        await c.delete()
+                        break
 
 
     """
