@@ -46,6 +46,13 @@ class Attachment(Base):
     #message = relationship(Message)
 
 
+class AdminRole(Base):
+    __tablename__ = 'admin_roles'
+    id = Column(Integer, primary_key=True)
+    role_id = Column(BigInteger)
+    perms = Column(Integer)
+
+
 class Reference(Base):
     """Messages the user copies from the server to use as evidence"""
     __tablename__ = 'report_reference'
@@ -78,8 +85,8 @@ def clear_db():
     """Destroys the database."""
     with engine.connect() as con:
         con.execute("DROP TABLE report_comment;")
-
         con.execute("DROP TABLE report_reference;")
         con.execute("DROP TABLE message_attachment;")
         con.execute("DROP TABLE message;")
         con.execute("DROP TABLE report;")
+        con.execute("DROP TABLE AdminRole;")

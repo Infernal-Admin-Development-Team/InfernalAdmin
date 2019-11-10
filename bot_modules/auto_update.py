@@ -6,6 +6,7 @@ from discord.ext import commands
 from discord.ext.commands import Cog, command, check
 from github import Github
 
+from database import clear_db
 from util import *
 
 
@@ -51,6 +52,17 @@ class AutoUpdate(Cog):
         for b in branches:
             out_str += b + "\n "
         await ctx.send("There are " + str(len(branches)) + " branches\n```" + out_str + "```")
+
+    @command()
+    @check(is_owner)
+    async def purgedb(self, ctx):
+        """Destroys the database."""
+        await ctx.send("Removing the content and structure of the database...")
+        clear_db()
+        await ctx.send("Killing bot... Please reset to reinitialize DB")
+        await self.bot.close()
+
+        exit(1)
 
     @commands.command()
     @check(is_owner)

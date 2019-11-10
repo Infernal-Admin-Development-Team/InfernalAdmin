@@ -21,20 +21,6 @@ class Reporting(Cog):
                               "server issue"]
         self.active_report_sessions = []
         self.report_gen = ReportGenerator(self.bot)
-    async def print_report_to_server(self, report_id):
-        """
-        Checks if the report has its own channel, if not it creates one
-        Will populate the channel with the initial report info
-        """
-        server = self.bot.get_guild(CONFIG.server)
-        channel = None
-        for c in server.channels:
-            if c.id == CONFIG.reports_category:
-                channel = await server.create_text_channel("report_" + str(report_id), category=c)
-                break
-
-
-
 
     @command()
     async def report(self, ctx):
@@ -174,7 +160,7 @@ class Reporting(Cog):
                                     "Type 'done' or if you wish to add more messages copy them here")
                             await msg.add_reaction("✔")
                         else:
-                            await msg.add_reaction("❌")
+                            await ctx.message.author.send("Could not find message in server")
             await ctx.message.author.send("Please confirm")
 
             report_msg = ""
@@ -213,7 +199,7 @@ class Reporting(Cog):
         await ctx.message.author.send(
             "You can use ``" + CONFIG.prefix + "myreports`` to view all the reports you have submitted")
         self.active_report_sessions.remove(ctx.message.author)
-
+        await self.report_gen.print_report_to_server(report_id)
     @report.error
     async def report_error(self, ctx, error):
         self.active_report_sessions.remove(ctx.message.author)
