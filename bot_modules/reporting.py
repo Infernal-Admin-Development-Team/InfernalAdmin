@@ -66,15 +66,35 @@ class Reporting(Cog):
                 msg = await self.bot.wait_for('message', timeout=120, check=check)
                 if 'y' in msg.content:
                     await ctx.message.author.send("Please copy their name.")
+                    count = 0
+                    membernames = []
                     while True:
                         msg = await self.bot.wait_for('message', timeout=120, check=check)
                         for m in guild.members:
-                            if msg.content in m.name:
+
+                            nick = ""
+                            if m.nick:
+                                nick = m.nick
+                            if msg.content in m.name or msg.content in nick:
                                 offender = m
-                                break
+                                count += 1
+                                membernames.append([m.name, nick])
+
                         if offender == None:
                             await ctx.message.author.send("No member found")
+                        elif count > 1:
+                            await ctx.message.author.send("Multiple members found")
+                            for names in membernames:
+                                await ctx.message.author.send(names[0] + ", nickname: " + names[1])
+                            await ctx.message.author.send("Please copy one of the users above")
+                            count = 0
+                            membernames = []
+                            offender = None
                         else:
+                            if offender.nick:
+                                await ctx.message.author.send("Using user:" + offender.name + ", nick:" + offender.nick)
+                            else:
+                                await ctx.message.author.send("Using user:" + offender.name)
                             break
                 elif 'n' in msg.content:
                     break
@@ -113,17 +133,19 @@ class Reporting(Cog):
                         s = session()
                         results = s.query(Message).filter(Message.content.ilike("%" + msg.content + "%"))
                         result_canidates = []
+
                         s.close()
                         if results.count():
                             if results.count() > 1:
                                 num_groups = 0
-                                await ctx.message.author.send("I found multiple messages which match that content.")
+
                                 result_groups = dbutil.group_message_results(results)
                                 if len(result_groups) == 1:
                                     for m in result_groups[0]:
                                         offending_msgs.append(m)
 
                                 else:
+                                    await ctx.message.author.send("I found multiple messages which match that content.")
                                     for group in result_groups:
                                         author = await self.bot.fetch_user(group[0][0].author)
                                         channel = await self.bot.fetch_channel(group[0][0].channel)
@@ -146,6 +168,7 @@ class Reporting(Cog):
                                         if msg.content.isdigit() and 0 < int(msg.content) <= len(result_canidates):
 
                                             offending_msgs.append(result_canidates[int(msg.content) - 1])
+
                                             break
                                         else:
                                             await ctx.message.author.send("Invalid choice")
@@ -186,10 +209,13 @@ class Reporting(Cog):
             report_id = dbutil.add_report(selected_category, ctx.message.author.id, 0, report_content, msg.created_at,
                                           [])
         else:
+            final_msg_id_list = []
             final_offending_msg_list = []
             for g in offending_msgs:
                 for m in g:
-                    final_offending_msg_list.append(m)
+                    if m.id not in final_msg_id_list:
+                        final_offending_msg_list.append(m)
+                        final_msg_id_list.append(m.id)
 
             report_id = dbutil.add_report(selected_category, ctx.message.author.id, offender.id, report_content,
                                           msg.created_at, final_offending_msg_list)
@@ -200,6 +226,7 @@ class Reporting(Cog):
             "You can use ``" + CONFIG.prefix + "myreports`` to view all the reports you have submitted")
         self.active_report_sessions.remove(ctx.message.author)
         await self.report_gen.print_report_to_server(report_id)
+
     @report.error
     async def report_error(self, ctx, error):
         self.active_report_sessions.remove(ctx.message.author)
@@ -209,7 +236,7 @@ class Reporting(Cog):
                     "Your session has expired due to inactivity. Please run ``" + CONFIG.prefix + "report`` again if you wish to continue")
         else:
             raise error
-
+    
 
 def setup(bot):
     bot.add_cog(Reporting(bot))

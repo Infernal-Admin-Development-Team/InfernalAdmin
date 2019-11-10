@@ -40,7 +40,7 @@ class ReportViewing(Cog):
             if report.poster_id == ctx.message.author.id:
                 await self.reportGen.print_report(report_id, ctx, 5)
         else:
-            if ctx.message.author.is_admin:
+            if can_view_reports(ctx):
                 await self.reportGen.print_report_to_server(report_id)
 
     @command()
