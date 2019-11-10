@@ -90,17 +90,16 @@ class ReportViewing(Cog):
                         break
 
 
-    """
+
     @view.error
     async def view_error(self, ctx, error):
 
-        if isinstance(error, commands.MissingRequiredArgument):
+        if isinstance(error, discord.ext.commands.MissingRequiredArgument):
             return await ctx.send(error)
-        elif isinstance(error, commands.BadArgument):
+        elif isinstance(error, discord.ext.commands.BadArgument):
             return await ctx.send(error)
         else:
             raise error
-    """
 
 
 def setup(bot):
