@@ -11,9 +11,6 @@ log = logging.getLogger(__name__)
 cwd = Path(os.getcwd())
 parent = cwd.parent
 if CONFIG.os == "windows":
-    print("------------------------------------------------------------------------------------------")
-    print("STARTING BOT IN ", cwd)
-    print("------------------------------------------------------------------------------------------")
     shutil.copy(str(os.getcwd()) + "/update_windows.py", str(parent) + "/update_windows.py")
 
 bot = InfernalAdminClient()

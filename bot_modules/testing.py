@@ -15,6 +15,10 @@ class Testing(Cog):
     async def mkrole(self, ctx):
         print("aaa")
 
+    @command()
+    async def guild(self, ctx):
+        await ctx.send(self.bot.get_guild(CONFIG.server).name)
+
 
 def setup(bot):
     if CONFIG.enable_testing:

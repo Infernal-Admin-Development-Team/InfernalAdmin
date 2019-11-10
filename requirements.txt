@@ -8,3 +8,4 @@ pygithub
 sqlalchemy
 psycopg2
 sendgrid
+PyNaCl
