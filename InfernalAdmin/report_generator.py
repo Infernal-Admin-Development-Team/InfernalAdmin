@@ -95,7 +95,7 @@ class ReportGenerator:
         if report_has_channel == False:
             await self.print_report(report_id, channel, 10)
 
-        return report.channel
+        return channel.id
 
     async def publish_new_report(self, report_id):
         """Will print the report to the server and notify all admins of the new report"""
