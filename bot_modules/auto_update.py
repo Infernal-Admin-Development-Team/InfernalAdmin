@@ -44,6 +44,7 @@ class AutoUpdate(Cog):
         return ret_list
 
     @command()
+    @check(is_owner)
     async def branches(self, ctx):
         """->Gets the branches from the github repo"""
         out_str = " "

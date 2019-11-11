@@ -43,6 +43,16 @@ class InfernalAdminClient(commands.Bot):
             print(module[:-3])
             self.load_extension("bot_modules." + module[:-3])
 
+    def get_member(self, user_id):
+        if user_id == 0:
+            return None
+        for member in self.get_guild(CONFIG.server).members:
+            if member.id == user_id:
+                return member
+        return None
+
+
+
     async def process_commands(self, message):
         ctx = await self.get_context(message)
 
