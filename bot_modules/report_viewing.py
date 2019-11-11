@@ -221,7 +221,7 @@ class ReportViewing(Cog):
             msg = (await ctx.send(
                 "searching for all reports in which **" + ctx.message.mentions[0].name + "** was the offender"))
             s = db.session()
-            results = s.query(db.Report).filter(db.Report.poster_id == ctx.message.mentions[0].id)
+            results = s.query(db.Report).filter(db.Report.offender_id == ctx.message.mentions[0].id)
 
             s.close()
             await self.send_list(ctx, results)
