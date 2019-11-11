@@ -17,7 +17,7 @@ class Reporting(Cog):
                               "dispute between users",
                               "spam",
                               "bot abuse",
-                              "harrasssment",
+                              "harassment",
                               "server issue"]
         self.active_report_sessions = []
         self.report_gen = ReportGenerator(self.bot)
@@ -51,7 +51,7 @@ class Reporting(Cog):
                 "Dispute between users\n"
                 "Spam\n"
                 "Bot abuse\n"
-                "Harrasssment\n"
+                "Harassment\n"
                 "Server Issue```")
 
             msg = await self.bot.wait_for('message', timeout=120, check=check)
@@ -116,15 +116,15 @@ class Reporting(Cog):
                 else:
                     report_content += msg.content + "\n"
 
-            await ctx.message.author.send("Please copy any relevant messages from the offender.\n"
-                                          "If there were no offending messages please say \"done\""
-                                          "If the messages were deleted, just paste any messages that occured on"
-                                          "the same channel above or below the offending messages"
-                                          "say \"done\" when you are done")
+
 
             offending_msgs = []
             if offender != None:
-
+                await ctx.message.author.send("Please copy any relevant messages from the offender.\n"
+                                              "If there were no offending messages please say \"done\""
+                                              "If the messages were deleted, just paste any messages that occured on"
+                                              "the same channel above or below the offending messages"
+                                              "say \"done\" when you are done")
                 while True:
                     msg = await self.bot.wait_for('message', timeout=120, check=check)
                     if msg.content == "done":

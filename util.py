@@ -68,17 +68,16 @@ def is_admin(ctx):
     s.close()
     return user_is_admin
 def report_type_to_str(type):
-    types = ["admin abuse", "dispute between users", "spam", "bot abuse", "harrasssment", "server issue"]
+    types = ["admin abuse", "dispute between users", "spam", "bot abuse", "harassment", "server issue"]
     return types[type]
 
 
 def get_link_to_channel(channel_id):
-    return "http://discordapp.com/channels/" + str(CONFIG.server) + "/" + str(CONFIG.reports_channel)
+    return "http://discordapp.com/channels/" + str(CONFIG.server) + "/" + str(channel_id)
 
 def report_status_to_str(status):
     types = ["OPEN", "RESOLVED", "REJECTED", "IN PROGRESS"]
     return types[status]
-
 
 class ActivityReader:
     def __init__(self, filename):
@@ -93,4 +92,5 @@ class ActivityReader:
         ret_num = int(activity[0])
         ret_str = activity[4:-2]
         return ret_num, ret_str
+
 

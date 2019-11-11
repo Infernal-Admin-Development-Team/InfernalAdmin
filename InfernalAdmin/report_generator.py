@@ -1,3 +1,5 @@
+import discord
+
 import database as db
 import database.msgutil as msgutil
 import database.util as dbutil
@@ -12,6 +14,7 @@ class ReportGenerator:
         s = db.session()
         report = s.query(db.Report).filter(db.Report.id == report_id).first()
         s.close()
+        """
         header = ""
         header += ("**REPORT-ID**    " + str(report.id) + "\n")
         header += ("**STATUS**          " + report_status_to_str(report.status) + "\n")
@@ -23,7 +26,35 @@ class ReportGenerator:
             header += "**OFFENDER**      NONE\n"
         header += "**CONTENT** "
         await ctx.send(header)
-        await msgutil.send_long_msg(report.content, ctx)
+        """
+
+        poster = self.bot.get_member(report.poster_id)
+        offender = None
+
+        e = discord.Embed(title="**Report# **" + str(report.id), colour=0xFF0000, type="rich")
+
+        if poster == None:
+            e.add_field(name="**POSTER:**", value=(await self.bot.fetch_user(report.poster_id)).name)
+        else:
+            e.add_field(name="**POSTER:**", value=poster.display_name)
+
+        e.add_field(name="**STATUS:**", value='[' + report_status_to_str(report.status) + ']')
+        e.add_field(name="**CATEGORY:**", value=report_type_to_str(int(report.category)))
+        if report.offender_id != 0:
+            offender = self.bot.get_member(report.offender_id)
+            if offender == None:
+                e.add_field(name="**OFFENDER:**", value=(await self.bot.fetch_user(report.offender_id)).name)
+            else:
+                e.add_field(name="**OFFENDER:**", value=offender.display_name)
+
+        if len(report.content) > 1500:
+            await ctx.send(embed=e)
+            await ctx.send("**CONTENT**")
+            await msgutil.send_long_msg(report.content, ctx)
+        else:
+            e.add_field(name="**CONTENT**", value=report.content)
+            await ctx.send(embed=e)
+
         refrences = s.query(db.Message).join(db.Reference).filter(db.Reference.report_id == report_id)
         grouped_refrences = dbutil.group_message_results(refrences)
         for g in grouped_refrences:
@@ -63,8 +94,9 @@ class ReportGenerator:
         s.close()
         if report_has_channel == False:
             await self.print_report(report_id, channel, 10)
-        return channel.id
+
+        return report.channel
 
     async def publish_new_report(self, report_id):
         """Will print the report to the server and notify all admins of the new report"""
-        await self.print_report_to_server(report_id)
+        return await self.print_report_to_server(report_id)
