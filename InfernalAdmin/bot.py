@@ -80,6 +80,7 @@ class InfernalAdminClient(commands.Bot):
 
     async def status_task(self):
         while True:
+            self.activity_show_help += 1
             if self.activity_show_help == 3:
                 self.activity_show_help = 0
                 activity = Activity(name=CONFIG.prefix + "help", type=discord.ActivityType.playing)
