@@ -10,7 +10,7 @@ from discord import Activity, Game
 from discord.ext import commands
 
 from database import util as db
-from util import CONFIG
+from util import CONFIG, ActivityReader
 
 
 class InfernalAdminClient(commands.Bot):
@@ -23,16 +23,8 @@ class InfernalAdminClient(commands.Bot):
         super().__init__(command_prefix=CONFIG.prefix, description=CONFIG.description,
                         pm_help=None, help_attrs=dict(hidden=True), fetch_offline_members=False)
 
-        """
-        TODO replace the below with a call to 
-        self.activitys=ActivityReader("someFile.txt")
-        """
-        self.activities = [Activity(name="with fire", type=discord.ActivityType.playing),
-                           Activity(name="Pompanomike closely", type=discord.ActivityType.watching),
-                           Activity(name=CONFIG.prefix + "help", type=discord.ActivityType.playing),
-                           Activity(name="mispaling to motivate mike to join the project.",
-                                    type=discord.ActivityType.playing),
-                           Activity(name="CHRIS NOISES", type=discord.ActivityType.listening)]
+        self.activity_gen = ActivityReader("activites.txt")
+        self.activity_show_help = 0
 
         self.event(self.on_ready)
         modules = [f for f in os.listdir("bot_modules") if isfile(join("bot_modules", f))]
@@ -88,10 +80,14 @@ class InfernalAdminClient(commands.Bot):
 
     async def status_task(self):
         while True:
-            # TODO use self.activityReader.getNextActivity() in here
-            for activity in self.activities:
-                await self.change_presence(activity=activity)
-                await asyncio.sleep(20)
+
+            if self.activity_show_help == 3:
+                self.activity_show_help = 0
+                activity = Activity(name=CONFIG.prefix + "help", type=discord.ActivityType.playing)
+            else:
+                activity = self.activity_gen.getNextActivity()
+            await self.change_presence(activity=activity)
+            await asyncio.sleep(10)
 
     def begin(self):
 

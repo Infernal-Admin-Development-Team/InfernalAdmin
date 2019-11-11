@@ -3,6 +3,8 @@ import logging
 import random
 from collections import namedtuple
 
+import discord
+
 import database as db
 
 # Reading the config file and putting it into a global variable
@@ -87,10 +89,19 @@ class ActivityReader:
         f.close()
 
     def getNextActivity(self):
-        index = random.randint(0, len(self.activity_list))
+
+        index = random.randint(0, len(self.activity_list) - 1)
         activity = self.activity_list[index]
         ret_num = int(activity[0])
         ret_str = activity[4:-2]
-        return ret_num, ret_str
+        type = None
 
-
+        if ret_num == 0:
+            type = discord.ActivityType.playing
+        elif ret_num == 1:
+            type = discord.ActivityType.watching
+        elif ret_num == 2:
+            type = discord.ActivityType.listening
+        else:
+            type = discord.ActivityType.streaming
+        return discord.Activity(name=ret_str, type=type)
