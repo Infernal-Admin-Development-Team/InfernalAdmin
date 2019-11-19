@@ -1,6 +1,5 @@
 import asyncio
 
-import discord
 from discord.ext.commands import Cog, command, check, group
 
 from InfernalAdmin.report_generator import ReportGenerator
@@ -42,7 +41,6 @@ class ReportViewing(Cog):
                 offender = self.bot.get_member(r.offender_id)
             poster = self.bot.get_member(r.poster_id)
             offender_name = "None"
-            poster_name = "Invalid"
             content = r.content[:40] + (r.content[40:] and '...')
             if not poster:
                 poster_name = (await self.bot.fetch_user(r.poster_id)).name

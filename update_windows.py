@@ -15,13 +15,10 @@ print("waiting for bot to die")
 sleep(6)
 print("Starting update")
 def on_rm_error(func, path, exc_info):
-    # path contains the path of the file that couldn't be removed
-    # let's just assume that it's read-only and unlink it.
     os.chmod(path, stat.S_IWRITE)
     os.unlink(path)
 
 def copy_protected():
-    file_list = []
     if Path(os.path.join(os.getcwd(), 'InfernalAdmin/protected_files.txt')).exists():
         with open(os.path.join(os.getcwd(), 'InfernalAdmin/protected_files.txt')) as f:
             file_list = f.readlines()
