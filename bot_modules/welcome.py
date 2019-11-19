@@ -22,7 +22,6 @@ class Welcome(commands.Cog):
         return Image.open(temp_file).convert('RGB')
 
     def create_welcome(self, user):
-        avatar_pos = (15, 15)
         avatar_url = "https://cdn.discordapp.com/avatars/{0.id}/{0.avatar}.png?size=1024".format(user)
         avatar = self.download_image(avatar_url)
 

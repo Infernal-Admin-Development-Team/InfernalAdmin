@@ -104,4 +104,5 @@ class ActivityReader:
             type = discord.ActivityType.listening
         else:
             type = discord.ActivityType.streaming
+
         return discord.Activity(name=ret_str, type=type)
