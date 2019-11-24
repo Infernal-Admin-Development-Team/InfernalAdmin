@@ -64,7 +64,7 @@ class Reporting(Cog):
             await ctx.message.author.send("Was there an offender?(y/n)")
             while True:
                 msg = await self.bot.wait_for('message', timeout=120, check=check)
-                if 'y' in msg.content:
+                if 'y' in msg.content.lower():
                     await ctx.message.author.send("Please copy their name.")
                     count = 0
                     membernames = []
@@ -199,7 +199,7 @@ class Reporting(Cog):
             await msgutil.print_message_groups(offending_msgs, ctx.message.author, self.bot, padding=3)
             await ctx.message.author.send("Is this information correct? (y/n)")
             msg = await self.bot.wait_for('message', timeout=120, check=check)
-            if 'y' in msg.content:
+            if 'y' in msg.content.lower():
                 break
 
 
