@@ -2,7 +2,7 @@ import discord
 import requests
 from PIL import Image, ImageDraw, ImageFont
 from discord.ext import commands
-
+from util import is_owner
 
 class Welcome(commands.Cog):
     """This will contain everything relating to data"""
@@ -48,7 +48,8 @@ class Welcome(commands.Cog):
         base.save(temp_file)
         return temp_file
 
-    # @commands.command()
+    @commands.command()
+    @check(is_owner)
     async def testwelcome(self, ctx):
         member = ctx.message.author
         await ctx.message.delete()
