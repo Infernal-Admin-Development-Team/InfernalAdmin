@@ -147,6 +147,7 @@ class ReportViewing(Cog):
                     await asyncio.sleep(10)
                     await msg.delete()
 
+    """
     @view.error
     async def view_error(self, ctx, error):
 
@@ -161,6 +162,7 @@ class ReportViewing(Cog):
         else:
             raise error
 
+    """
     @command()
     async def myreports(self, ctx):
         if not isinstance(ctx.message.channel, discord.DMChannel):
