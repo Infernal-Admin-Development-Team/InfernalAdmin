@@ -131,6 +131,7 @@ class Reporting(Cog):
 
 
             offending_msgs = []
+
             if offender != None:
                 await ctx.message.author.send("Please copy any relevant messages from the offender.\n"
                                               "If there were no offending messages please say \"done\""
@@ -138,6 +139,7 @@ class Reporting(Cog):
                                               "the same channel above or below the offending messages"
                                               "say \"done\" when you are done, you can say cancel to exit the report")
                 while True:
+                    can_use_msg = False
                     msg = await self.bot.wait_for('message', timeout=120, check=check)
                     if (await is_cancel(msg)):
                         return
@@ -149,6 +151,7 @@ class Reporting(Cog):
                         result_canidates = []
 
                         s.close()
+                        member = self.bot.get_member(msg.author.id)
                         if results.count():
                             if results.count() > 1:
                                 num_groups = 0
@@ -156,24 +159,30 @@ class Reporting(Cog):
                                 result_groups = dbutil.group_message_results(results)
                                 if len(result_groups) == 1:
                                     for m in result_groups[0]:
-                                        offending_msgs.append(m)
-
+                                        if self.bot.check_channel_exists(m.channel):
+                                            can_use_msg = True
+                                            if m.channel.permissions_for(member).read_messages:
+                                                offending_msgs.append(m)
                                 else:
                                     await ctx.message.author.send("I found multiple messages which match that content.")
                                     for group in result_groups:
                                         author = await self.bot.fetch_user(group[0][0].author)
-                                        channel = await self.bot.fetch_channel(group[0][0].channel)
-                                        output = author.name + " at #" + channel.name + "```"
-                                        for m in group:
-                                            num_groups += 1
-                                            result_canidates.append(m)
-                                            output += "|" + str(num_groups) + "|  " + str(len(m)) + " instance(s) of " + \
-                                                      m[
-                                                          0].content[
-                                                      :75] + " at " + str(
-                                                m[0].timestamp) + "\n"
-                                        output += "```"
-                                        await ctx.message.author.send(output)
+                                        if self.bot.check_channel_exists(group[0][0].channel):
+
+                                            channel = await self.bot.fetch_channel(group[0][0].channel)
+                                            if channel and channel.permissions_for(member).read_messages:
+                                                output = author.name + " at #" + channel.name + "```"
+                                                for m in group:
+                                                    num_groups += 1
+                                                    result_canidates.append(m)
+                                                    output += "|" + str(num_groups) + "|  " + str(
+                                                        len(m)) + " instance(s) of " + \
+                                                              m[
+                                                                  0].content[
+                                                              :75] + " at " + str(
+                                                        m[0].timestamp) + "\n"
+                                                output += "```"
+                                                await ctx.message.author.send(output)
                                     await ctx.message.author.send(
                                         "Please select the number that corresponds to the instance")
                                     while True:
@@ -182,7 +191,7 @@ class Reporting(Cog):
                                         if msg.content.isdigit() and 0 < int(msg.content) <= len(result_canidates):
 
                                             offending_msgs.append(result_canidates[int(msg.content) - 1])
-
+                                            can_use_msg = True
                                             break
                                         else:
                                             await ctx.message.author.send("Invalid choice")
@@ -195,7 +204,10 @@ class Reporting(Cog):
                                     offending_msgs.append([r])
                                 await ctx.message.author.send(
                                     "Type 'done' or if you wish to add more messages copy them here")
-                            await msg.add_reaction("✔")
+                            if can_use_msg:
+                                await msg.add_reaction("✔")
+                            else:
+                                await ctx.message.author.send("Could not find message in server")
                         else:
                             await ctx.message.author.send("Could not find message in server")
             await ctx.message.author.send("Please confirm")

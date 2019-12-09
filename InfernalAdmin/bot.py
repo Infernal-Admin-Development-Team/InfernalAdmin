@@ -39,6 +39,13 @@ class InfernalAdminClient(commands.Bot):
                 return member
         return None
 
+    def check_channel_exists(self, channel_id):
+        server = self.get_guild(CONFIG.server)
+        for c in server.channels:
+            if c.id == channel_id:
+                return c
+        return None
+
     async def on_message(self, message):
         """Main message handler"""
         if message.author.bot:

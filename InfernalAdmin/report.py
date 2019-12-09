@@ -61,7 +61,10 @@ class Report:
                 await ctx.send("**CONTENT**")
                 await msgutil.send_long_msg(self.report.content, ctx)
             else:
-                e.add_field(name="**CONTENT**", value=self.report.content)
+                if len(self.report.content):
+                    e.add_field(name="**CONTENT**", value=self.report.content)
+                else:
+                    e.add_field(name="**CONTENT**", value="none")
                 await ctx.send(embed=e)
 
             grouped_refrences = dbutil.group_message_results(self.get_references())
