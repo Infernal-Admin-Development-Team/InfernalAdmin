@@ -122,7 +122,6 @@ class ReportViewing(Cog):
                         channel = await rep.get_report_channel()
                         print(channel)
                         if channel:
-                            
                             author = msg2.author.name
                             print(author)
                             await channel.send("***" + str(author) + "***: " + str(msg2.content))
