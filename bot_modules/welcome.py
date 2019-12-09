@@ -2,7 +2,6 @@ import discord
 import requests
 from PIL import Image, ImageDraw, ImageFont
 from discord.ext import commands
-
 from util import is_owner, CONFIG
 
 
