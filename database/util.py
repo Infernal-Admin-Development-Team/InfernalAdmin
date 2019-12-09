@@ -1,41 +1,49 @@
-import database
+import database as db
 
 
 def record_message(m):
     """Adds a message to the database"""
-    s = database.session()
-    message2add = database.Message(channel=m.channel.id, author=m.author.id, content=m.content, timestamp=m.created_at)
+    s = db.session()
+    message2add = db.Message(msg_id=m.id, channel=m.channel.id, author=m.author.id, content=m.content,
+                             timestamp=m.created_at)
     s.add(message2add)
 
     s.flush()
 
     attachments = []
     for a in m.attachments:
-        att = database.Attachment(file_link=a.url, message_id=message2add.id)
+        att = db.Attachment(file_link=a.url, message_id=message2add.id)
         attachments.append(att)
     s.add_all(attachments)
     s.commit()
+
+    report = s.query(db.Report).filter(db.Report.channel == m.channel.id).first()
+    print(report)
+    if report:
+        rep_comment = db.ReportComment(message_id=message2add.id, report_id=report.id)
+        s.add(rep_comment)
+        s.commit()
+        print("attached message to report")
     s.close()
 
 
 def add_report(category, poster_id, offender_id, content, timestamp, offending_messages):
-    s = database.session()
-    report2add = database.Report(category=category, poster_id=poster_id, offender_id=offender_id, status=0,
+    s = db.session()
+    report2add = db.Report(category=category, poster_id=poster_id, offender_id=offender_id, status=0,
                                  content=content, timestamp=timestamp)
     s.add(report2add)
     s.flush()
     report_id = report2add.id
     refrences = []
     for msg in offending_messages:
-        refrences.append(database.Reference(message_id=msg.id, report_id=report2add.id))
+        refrences.append(db.Reference(message_id=msg.id, report_id=report2add.id))
     s.add_all(refrences)
     s.commit()
     s.close()
 
     return report_id
 
-def clear_outdated_messages():
-    s = database.session()
+
 
 
 def group_message_results(query_result):
@@ -74,7 +82,7 @@ def group_message_results(query_result):
 
 def get_messages_above(msg, count):
     """Grabs the N messages above the message in the same channel"""
-    s = database.session()
+    s = db.session()
     timestamp = str(msg.timestamp)
     channel = str(msg.channel)
     results = s.execute(
@@ -86,7 +94,7 @@ def get_messages_above(msg, count):
 
 def get_messages_below(msg, count):
     """Grabs the N messages below the message in the same channel"""
-    s = database.session()
+    s = db.session()
     timestamp = str(msg.timestamp)
     channel = str(msg.channel)
     results = s.execute(
@@ -97,7 +105,7 @@ def get_messages_below(msg, count):
 
 
 def get_message_attachments(msg):
-    s = database.session()
+    s = db.session()
     results = s.execute("SELECT * FROM message_attachment WHERE message_id=" + str(msg.id))
     s.close()
     return results

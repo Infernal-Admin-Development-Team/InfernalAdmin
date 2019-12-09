@@ -27,6 +27,7 @@ class Message(Base):
     """Same as discord message"""
     __tablename__ = 'message'
     id = Column(Integer, primary_key=True)
+    msg_id = Column(BigInteger)
     channel = Column(BigInteger)
     author = Column(BigInteger)
     content = Column(String)

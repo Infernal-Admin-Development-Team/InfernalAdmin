@@ -24,6 +24,8 @@ def is_owner(ctx):
 
 
 def can_view_reports(ctx):
+    if isinstance(ctx.channel, discord.DMChannel):
+        return False
     s = db.session()
     can_do = False
     for r in ctx.message.author.roles:

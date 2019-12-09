@@ -2,7 +2,7 @@ import asyncio
 
 from discord.ext.commands import Cog, command, check, group
 
-from InfernalAdmin.report_generator import ReportGenerator
+from InfernalAdmin.report import Report
 from util import *
 
 
@@ -12,7 +12,7 @@ class ReportViewing(Cog):
 
     def __init__(self, bot):
         self.bot = bot
-        self.reportGen = ReportGenerator(self.bot)
+
 
     async def check_if_in_main(self, ctx):
         if isinstance(ctx.message.channel, discord.DMChannel):
@@ -70,22 +70,84 @@ class ReportViewing(Cog):
 
     @command()
     async def view(self, ctx, report_id: int):
+        rep = Report(self.bot, report_id)
+        if not rep.report:
+            msg = await ctx.send("Report not found")
+            await asyncio.sleep(10)
+            await msg.delete()
+            return
         if isinstance(ctx.message.channel, discord.DMChannel):
             s = db.session()
             report = s.query(db.Report).filter(db.Report.id == report_id).first()
+            reporter = rep.report.poster_id
             s.close()
+
+            def check(m):
+                if isinstance(m.channel, discord.DMChannel):
+                    return m.author.id == reporter
+
             if report.poster_id == ctx.message.author.id:
-                await self.reportGen.print_report(report_id, ctx, 5)
+                await rep.render(ctx, 5)
+
+                while True:
+                    await ctx.send(
+                        "```to leave a comment on this report say 'comment'"
+                        "say anything else to exit```")
+                    msg = await self.bot.wait_for('message', timeout=120, check=check)
+                    if msg.content.lower() == "comment":
+                        await ctx.send(
+                            "The next message you post will be saved in the report and will be visible to the admins")
+                        msg2 = await self.bot.wait_for('message', timeout=120, check=check)
+
+                        s = db.session()
+                        message2add = db.Message(msg_id=msg2.id, channel=msg2.channel.id, author=msg2.author.id,
+                                                 content=msg2.content, timestamp=msg2.created_at)
+                        s.add(message2add)
+
+                        s.flush()
+
+                        attachments = []
+                        for a in msg2.attachments:
+                            att = db.Attachment(file_link=a.url, message_id=message2add.id)
+                            attachments.append(att)
+                        s.add_all(attachments)
+                        s.commit()
+                        s.flush()
+
+                        rep_comment = db.ReportComment(message_id=message2add.id, report_id=rep.report.id,
+                                                       visible_to_poster=True)
+                        s.add(rep_comment)
+                        s.commit()
+                        s.close()
+                        channel = await rep.get_report_channel()
+                        print(channel)
+                        if channel:
+                            
+                            author = msg2.author.name
+                            print(author)
+                            await channel.send("***" + str(author) + "***: " + str(msg2.content))
+
+                        else:
+
+                            await rep.render_to_server()
+                    else:
+                        await ctx.send(
+                            "Leaving interactive session")
+                        return
+
+
+
+
+
         else:
             if can_view_reports(ctx):
                 if await self.check_if_in_main(ctx):
                     await ctx.message.delete()
-                    channel_id = (await self.reportGen.print_report_to_server(report_id))
+                    channel_id = await rep.render_to_server()
                     msg = await ctx.send(get_link_to_channel(channel_id))
                     await asyncio.sleep(10)
                     await msg.delete()
 
-    """
     @view.error
     async def view_error(self, ctx, error):
 
@@ -93,9 +155,13 @@ class ReportViewing(Cog):
             return await ctx.send(error)
         elif isinstance(error, discord.ext.commands.BadArgument):
             return await ctx.send(error)
+        elif isinstance(error, discord.ext.commands.CommandInvokeError):
+            if error.original.__class__.__name__ == "TimeoutError":
+                await ctx.message.author.send(
+                    "Your session has expired due to inactivity. Please run ``" + CONFIG.prefix + "view`` again if you wish to continue")
         else:
             raise error
-    """
+
     @command()
     async def myreports(self, ctx):
         if not isinstance(ctx.message.channel, discord.DMChannel):
@@ -247,7 +313,9 @@ class ReportViewing(Cog):
 
             if r.channel:
                 for c in server.channels:
+                    print("R:" + str(r.channel) + "   C:" + str(c.id))
                     if c.id == r.channel:
+                        print("removing channel")
                         await c.delete()
                         break
 

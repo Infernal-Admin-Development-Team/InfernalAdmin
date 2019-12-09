@@ -3,6 +3,8 @@ import requests
 from PIL import Image, ImageDraw, ImageFont
 from discord.ext import commands
 
+from util import is_owner, CONFIG
+
 
 class Welcome(commands.Cog):
     """This will contain everything relating to data"""
@@ -39,7 +41,10 @@ class Welcome(commands.Cog):
         # adding avatar to base
         base.paste(avatar, (50, 125 - int(float(avatar.size[1]) / 2)), avatar)
         # adding text to base
-        fnt = ImageFont.truetype('/data/fonts/impact.ttf', 40)
+        if CONFIG.os != "windows":
+            fnt = ImageFont.truetype('data/fonts/impact.ttf', 40)
+        else:
+            fnt = ImageFont.truetype('/data/fonts/impact.ttf', 40)
         d = ImageDraw.Draw(base)
         d.text((230, 125 - int(float(avatar.size[1]) / 2)), "Hello " + user.name + ",\nWelcome to Inferno Games!",
                font=fnt, fill=(255, 255, 255, 255))
@@ -48,7 +53,8 @@ class Welcome(commands.Cog):
         base.save(temp_file)
         return temp_file
 
-    # @commands.command()
+    @commands.command()
+    @commands.check(is_owner)
     async def testwelcome(self, ctx):
         member = ctx.message.author
         await ctx.message.delete()

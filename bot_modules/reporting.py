@@ -2,10 +2,20 @@ import discord
 from discord.ext import commands
 from discord.ext.commands import Cog, command
 
+import database as db
 import database.msgutil as msgutil
 import database.util as dbutil
-from InfernalAdmin.report_generator import ReportGenerator
-from database import *
+from InfernalAdmin.report import Report
+from util import CONFIG
+
+
+async def is_cancel(msg):
+    if msg.content.lower() == "cancel":
+        await msg.channel.send("Canceled")
+        return True
+    else:
+        return False
+
 
 
 class Reporting(Cog):
@@ -20,7 +30,7 @@ class Reporting(Cog):
                               "harassment",
                               "server issue"]
         self.active_report_sessions = []
-        self.report_gen = ReportGenerator(self.bot)
+
 
     @command()
     async def report(self, ctx):
@@ -107,11 +117,13 @@ class Reporting(Cog):
                                           "You can use as many messages as you need\n"
                                           "You can post screenshots here, but try not to.\n"
                                           "You will be able to paste messages for evidence in the next step\n"
-                                          "say \"done\" when you are done")
+                                          "say \"done\" when you are done. You can say cancel to exit the report")
             report_content = ""
             while True:
                 msg = await self.bot.wait_for('message', timeout=120, check=check)
-                if msg.content == "done":
+                if (await is_cancel(msg)):
+                    return
+                if msg.content.lower() == "done":
                     break
                 else:
                     report_content += msg.content + "\n"
@@ -124,14 +136,16 @@ class Reporting(Cog):
                                               "If there were no offending messages please say \"done\""
                                               "If the messages were deleted, just paste any messages that occured on"
                                               "the same channel above or below the offending messages"
-                                              "say \"done\" when you are done")
+                                              "say \"done\" when you are done, you can say cancel to exit the report")
                 while True:
                     msg = await self.bot.wait_for('message', timeout=120, check=check)
-                    if msg.content == "done":
+                    if (await is_cancel(msg)):
+                        return
+                    if msg.content.lower() == "done":
                         break
                     else:
-                        s = session()
-                        results = s.query(Message).filter(Message.content.ilike("%" + msg.content + "%"))
+                        s = db.session()
+                        results = s.query(db.Message).filter(db.Message.content.ilike("%" + msg.content + "%"))
                         result_canidates = []
 
                         s.close()
@@ -202,7 +216,6 @@ class Reporting(Cog):
             if 'y' in msg.content.lower():
                 break
 
-
         await ctx.message.author.send("sending report")
         report_id = 0
         if offender == None:
@@ -225,7 +238,8 @@ class Reporting(Cog):
         await ctx.message.author.send(
             "You can use ``" + CONFIG.prefix + "myreports`` to view all the reports you have submitted")
         self.active_report_sessions.remove(ctx.message.author)
-        await self.report_gen.print_report_to_server(report_id)
+        new_report = Report(self.bot, report_id)
+        await new_report.render_to_server()
 
     @report.error
     async def report_error(self, ctx, error):
