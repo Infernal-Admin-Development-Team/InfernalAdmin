@@ -1,4 +1,5 @@
 import discord
+from discord.ext import commands
 from discord.ext.commands import Cog, command
 
 import database as db
@@ -262,7 +263,7 @@ class Reporting(Cog):
         self.active_report_sessions.remove(ctx.message.author)
         new_report = Report(self.bot, report_id)
         await new_report.render_to_server()
-    """
+
     @report.error
     async def report_error(self, ctx, error):
         self.active_report_sessions.remove(ctx.message.author)
@@ -272,7 +273,7 @@ class Reporting(Cog):
                     "Your session has expired due to inactivity. Please run ``" + CONFIG.prefix + "report`` again if you wish to continue")
         else:
             raise error
-    """
+    
 
 def setup(bot):
     bot.add_cog(Reporting(bot))
