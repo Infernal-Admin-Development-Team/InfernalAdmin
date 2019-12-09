@@ -209,6 +209,7 @@ class Reporting(Cog):
                             elif results.count() == 0:
                                 ctx.message.author.send("No results found")
                             else:
+                                can_use_msg = True
                                 for r in results:
                                     offending_msgs.append([r])
                                 await ctx.message.author.send(
