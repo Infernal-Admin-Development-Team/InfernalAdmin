@@ -1,5 +1,4 @@
 import discord
-from discord.ext import commands
 from discord.ext.commands import Cog, command
 
 import database as db
@@ -158,11 +157,20 @@ class Reporting(Cog):
 
                                 result_groups = dbutil.group_message_results(results)
                                 if len(result_groups) == 1:
+
                                     for m in result_groups[0]:
-                                        if self.bot.check_channel_exists(m.channel):
+                                        arr1 = []
+                                        for mm in m:
+                                            if self.bot.check_channel_exists(mm.channel):
+                                                can_use_msg = True
+                                                channel = await self.bot.fetch_channel(mm.channel)
+                                                if channel.permissions_for(member).read_messages:
+                                                    arr1.append(mm)
+                                        if len(arr1):
                                             can_use_msg = True
-                                            if m.channel.permissions_for(member).read_messages:
-                                                offending_msgs.append(m)
+                                            offending_msgs.append(arr1)
+
+
                                 else:
                                     await ctx.message.author.send("I found multiple messages which match that content.")
                                     for group in result_groups:
@@ -182,6 +190,7 @@ class Reporting(Cog):
                                                               :75] + " at " + str(
                                                         m[0].timestamp) + "\n"
                                                 output += "```"
+
                                                 await ctx.message.author.send(output)
                                     await ctx.message.author.send(
                                         "Please select the number that corresponds to the instance")
@@ -252,7 +261,7 @@ class Reporting(Cog):
         self.active_report_sessions.remove(ctx.message.author)
         new_report = Report(self.bot, report_id)
         await new_report.render_to_server()
-
+    """
     @report.error
     async def report_error(self, ctx, error):
         self.active_report_sessions.remove(ctx.message.author)
@@ -262,7 +271,7 @@ class Reporting(Cog):
                     "Your session has expired due to inactivity. Please run ``" + CONFIG.prefix + "report`` again if you wish to continue")
         else:
             raise error
-    
+    """
 
 def setup(bot):
     bot.add_cog(Reporting(bot))
