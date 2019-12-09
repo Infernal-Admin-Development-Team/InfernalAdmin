@@ -81,6 +81,8 @@ class Report:
                         if c.visible_to_poster:
                             if author.id != self.report.poster_id:
                                 await ctx.send("**" + author.name + "(to poster)**: " + msg_to_send.content)
+                            else:
+                                await ctx.send("**" + author.name + "**: " + msg_to_send.content)
                         else:
                             await ctx.send("**" + author.name + "**: " + msg_to_send.content)
 
