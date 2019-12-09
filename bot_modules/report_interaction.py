@@ -64,20 +64,20 @@ class ReportInteraction(Cog):
     async def comment(self, ctx):
         """Posts a comment on the report thread, can be used for notes, will be saved
                 even if the channel is deleted or clearreports is run"""
-
+        msg0 = ctx.message
         def check(m):
             return m.channel == ctx.message.channel
 
         poster_id = 0
         report_id = 0
-        await ctx.send("The next message you send will be forwarded to the submitter of the report")
-        msg = await self.bot.wait_for('message', timeout=120, check=check)
+        msg1 = await ctx.send("The next message you send will be forwarded to the submitter of the report")
+        msg2 = await self.bot.wait_for('message', timeout=120, check=check)
         print("reply posted")
         await asyncio.sleep(5)  # wait for message to be added to DB
 
         print("done waiting")
         s = db.session()
-        comment = s.query(db.Message).filter(db.Message.msg_id == msg.id).first()
+        comment = s.query(db.Message).filter(db.Message.msg_id == msg2.id).first()
         report_comment = s.query(db.ReportComment).filter(db.ReportComment.message_id == comment.id).first()
         report_comment.visible_to_poster = True
         report_id = report_comment.report_id
@@ -86,6 +86,11 @@ class ReportInteraction(Cog):
 
         report = Report(self.bot, report_id)
         await report.notify_user_of_comment()
+
+        await ctx.send("**" + msg0.author.name + "(to report poster)**: " + msg2.content)
+        await msg0.delete()
+        await msg1.delete()
+        await msg2.delete()
 
     @comment.error
     async def comment_error(self, ctx, error):

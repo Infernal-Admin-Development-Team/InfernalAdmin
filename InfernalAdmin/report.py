@@ -78,7 +78,11 @@ class Report:
                     msg_to_send = s.query(db.Message).filter(db.Message.id == c.message_id).first()
                     if msg_to_send:
                         author = await self.bot.fetch_user(msg_to_send.author)
-                        await ctx.send("**" + author.name + "**: " + msg_to_send.content)
+                        if c.visible_to_poster:
+                            if author.id != self.report.poster_id:
+                                await ctx.send("**" + author.name + "(to poster)**: " + msg_to_send.content)
+                        else:
+                            await ctx.send("**" + author.name + "**: " + msg_to_send.content)
 
                 else:
                     if c.visible_to_poster:
