@@ -25,7 +25,7 @@ class Welcome(commands.Cog):
     def create_welcome(self, user):
         avatar_url = "https://cdn.discordapp.com/avatars/{0.id}/{0.avatar}.png?size=1024".format(user)
         avatar = self.download_image(avatar_url)
-
+        avatar.resize((128,128))
         base = Image.new('RGBA', (9120, 4000), (0, 0, 0, 255))
         backround = Image.open("data/images/backround0.jpg").convert('RGBA')
         base.paste(backround, (0, 2000))
@@ -45,11 +45,11 @@ class Welcome(commands.Cog):
         else:
             fnt = ImageFont.truetype('/data/fonts/impact.ttf', 40)
         d = ImageDraw.Draw(base)
-        #d.text((230, 125 - int(float(avatar.size[1]) / 2)), "Hello " + user.name + ",\nWelcome to Inferno Games!",
-        #      font=fnt, fill=(255, 255, 255, 255))
-        
-        d.text((230, 125 - int(float(avatar.size[1]) / 2)), str(avatar.size),
+        d.text((230, 125 - int(float(avatar.size[1]) / 2)), "Hello " + user.name + ",\nWelcome to Inferno Games!",
               font=fnt, fill=(255, 255, 255, 255))
+        
+        #d.text((230, 125 - int(float(avatar.size[1]) / 2)), str(avatar.size),
+        #      font=fnt, fill=(255, 255, 255, 255))
         
         # saving base
         temp_file = 'data/temp.png'
