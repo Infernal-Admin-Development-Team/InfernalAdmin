@@ -72,7 +72,7 @@ def is_admin(ctx):
     s.close()
     return user_is_admin
 def report_type_to_str(type):
-    types = ["Admin Abuse", "Dispute between users", "Spam", "Bot Abuse", "Harassment", "Server Issue","Server Suggestion","User Issue","Other (Please Specify)"]
+    types = ["Admin Abuse", "Dispute between users", "Spam", "Bot Abuse", "Harassment", "Server Issue", "Server Suggestion", "User Issue", "Other"]
     return types[type]
 
 
