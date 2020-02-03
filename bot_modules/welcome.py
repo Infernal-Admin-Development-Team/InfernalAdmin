@@ -45,8 +45,12 @@ class Welcome(commands.Cog):
         else:
             fnt = ImageFont.truetype('/data/fonts/impact.ttf', 40)
         d = ImageDraw.Draw(base)
-        d.text((230, 125 - int(float(avatar.size[1]) / 2)), "Hello " + user.name + ",\nWelcome to Inferno Games!",
-               font=fnt, fill=(255, 255, 255, 255))
+        #d.text((230, 125 - int(float(avatar.size[1]) / 2)), "Hello " + user.name + ",\nWelcome to Inferno Games!",
+        #      font=fnt, fill=(255, 255, 255, 255))
+        
+        d.text((230, 125 - int(float(avatar.size[1]) / 2)), str(avatar.size),
+              font=fnt, fill=(255, 255, 255, 255))
+        
         # saving base
         temp_file = 'data/temp.png'
         base.save(temp_file)
