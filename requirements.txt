@@ -1,9 +1,3 @@
 lxml
 asyncpg>=0.12.0
-click
-parsedatetime
-python-dateutil
-pygithub
-sqlalchemy
-psycopg2
-sendgrid
+
