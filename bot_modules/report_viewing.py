@@ -218,7 +218,10 @@ class ReportViewing(Cog):
                          "spam",
                          "bot abuse",
                          "harassment",
-                         "server issue"]
+                         "server issue",
+                         "server suggestion",
+                         "user issue",
+                         "other"]
         index = 0
         valid_input = False
         for c in category_list:
@@ -234,7 +237,10 @@ class ReportViewing(Cog):
                 "Spam\n"
                 "Bot abuse\n"
                 "Harassment\n"
-                "Server Issue```")
+                "Server Issue\n"
+                "Server Suggestion\n"
+                "User Issue\n"
+                "Other```")
             await asyncio.sleep(10)
         else:
             msg = (await ctx.send("searching for all reports with Category: " + k_word))
