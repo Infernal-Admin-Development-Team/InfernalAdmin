@@ -25,7 +25,7 @@ class Welcome(commands.Cog):
     def create_welcome(self, user):
         avatar_url = "https://cdn.discordapp.com/avatars/{0.id}/{0.avatar}.png?size=1024".format(user)
         avatar = self.download_image(avatar_url)
-        avatar.resize((128,128))
+        avatar = avatar.resize((128,128))
         base = Image.new('RGBA', (9120, 4000), (0, 0, 0, 255))
         backround = Image.open("data/images/backround0.jpg").convert('RGBA')
         base.paste(backround, (0, 2000))
