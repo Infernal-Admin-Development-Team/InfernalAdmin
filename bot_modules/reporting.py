@@ -115,7 +115,7 @@ class Reporting(Cog):
                             else:
                                 await ctx.message.author.send("Using user:" + offender.name)
                             break
-                elif 'n' in msg.content:
+                elif 'n' in msg.content.lower():
                     break
                 else:
                     await ctx.message.author.send("Please say yes or no")
