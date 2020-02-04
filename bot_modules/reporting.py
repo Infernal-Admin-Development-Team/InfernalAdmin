@@ -23,12 +23,18 @@ class Reporting(Cog):
 
     def __init__(self, bot):
         self.bot = bot
+        #types = ["Admin Abuse", "Dispute between users", "Spam", "Bot Abuse", "Harassment", "Server Issue", "Server Suggestion",
+        #"User Issue", "Other"]
+        
         self.category_list = ["admin abuse",
                               "dispute between users",
                               "spam",
                               "bot abuse",
                               "harassment",
-                              "server issue"]
+                              "server issue",
+                              "server suggestion",
+                              "user issue",
+                              "other"]
         self.active_report_sessions = []
 
 
@@ -62,7 +68,10 @@ class Reporting(Cog):
                 "Spam\n"
                 "Bot abuse\n"
                 "Harassment\n"
-                "Server Issue```")
+                "Server Issue\n"
+                "Server Suggestion\n"
+                "User Issue\n"
+                "Other```")
 
             msg = await self.bot.wait_for('message', timeout=120, check=check)
             while msg.content.lower() not in self.category_list:

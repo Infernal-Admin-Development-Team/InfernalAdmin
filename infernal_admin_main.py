@@ -6,7 +6,7 @@ from pathlib import Path
 
 from InfernalAdmin.bot import InfernalAdminClient
 from util import CONFIG
-
+print("hi")
 log = logging.getLogger(__name__)
 cwd = Path(os.getcwd())
 parent = cwd.parent
