@@ -131,6 +131,7 @@ class Reporting(Cog):
             while True:
                 msg = await self.bot.wait_for('message', timeout=120, check=check)
                 if (await is_cancel(msg)):
+                    self.active_report_sessions.remove(ctx.message.author)
                     return
                 if msg.content.lower() == "done":
                     break
@@ -151,6 +152,7 @@ class Reporting(Cog):
                     can_use_msg = False
                     msg = await self.bot.wait_for('message', timeout=120, check=check)
                     if (await is_cancel(msg)):
+                        self.active_report_sessions.remove(ctx.message.author)
                         return
                     if msg.content.lower() == "done":
                         break
