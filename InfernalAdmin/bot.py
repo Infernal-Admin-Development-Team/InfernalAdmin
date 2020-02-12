@@ -50,7 +50,7 @@ class InfernalAdminClient(commands.Bot):
         """Main message handler"""
         if message.author.bot:
             return
-        if ctx.message.author.id==229379462968508417:
+        if message.author.id==229379462968508417:
             return
         
         ctx = await self.get_context(message)
