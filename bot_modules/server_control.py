@@ -33,6 +33,41 @@ class ServerControl(Cog):
 
     @command()
     @check(is_owner)
+    async def getoldusers(self, ctx):
+        s = db.session()
+        for member in self.bot.get_guild(CONFIG.server).members:
+
+            message = s.query(db.Message).filter(db.Message.author == member.id).first()
+            if not message:
+                if not member.bot:
+                    await ctx.send("No messages from " + member.name)
+
+    @command()
+    @check(is_owner)
+    async def kickoldusers(self, ctx):
+        """As of right now it only gets users who did not post on the server since the bot went online"""
+        s = db.session()
+
+        for member in self.bot.get_guild(CONFIG.server).members:
+
+            message = s.query(db.Message).filter(db.Message.author == member.id).first()
+            if not message:
+                if not member.bot:
+                    server = self.bot.get_guild(CONFIG.server)
+
+                    print(server.system_channel)
+                    inviteLink = await self.bot.get_guild(CONFIG.server).system_channel.create_invite(xkcd=True,
+                                                                                                      max_uses=1)
+
+                    await ctx.send("No messages from " + member.name)
+                    await member.send(
+                        "You have been kicked from Inferno games because you have not posted anything for a few months")
+                    await member.send("If you feel this was a mistake you can rejoin by clicking " + str(inviteLink))
+                    await member.kick()
+        s.close()
+
+    @command()
+    @check(is_owner)
     async def listoperators(self, ctx):
         s = db.session()
         roles = s.query(db.AdminRole)
