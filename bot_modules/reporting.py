@@ -40,9 +40,7 @@ class Reporting(Cog):
 
     @command()
     async def report(self, ctx):
-        #Temp fix for user abusing the report command, a perminant blacklist will be implemented soon
-        if ctx.message.author.id==229379462968508417:
-            return
+
         """->Submits a report to the admins"""
         reporter = ctx.message.author
         if reporter in self.active_report_sessions:

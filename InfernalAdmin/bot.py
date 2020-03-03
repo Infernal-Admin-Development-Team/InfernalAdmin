@@ -50,7 +50,8 @@ class InfernalAdminClient(commands.Bot):
         """Main message handler"""
         if message.author.bot:
             return
-        if message.author.id==229379462968508417:
+        if self.get_member(message.author.id) is None:
+            await message.author.send("Sorry but you are not a member of the server.")
             return
         
         ctx = await self.get_context(message)
