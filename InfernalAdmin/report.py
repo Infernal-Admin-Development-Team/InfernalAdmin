@@ -14,12 +14,10 @@ class Report:
         self.report_id = report_id
         s = db.session()
         self.report = s.query(db.Report).filter(db.Report.id == report_id).first()
-
         s.close()
 
     async def notify_user_of_comment(self):
         poster = await self.bot.fetch_user(self.report.poster_id)
-        print(poster.name)
         await poster.send("A comment has been made on your report. Use " + CONFIG.prefix + "view " + str(
             self.report_id) + " to see the changes")
 
@@ -55,7 +53,7 @@ class Report:
                     e.add_field(name="**OFFENDER:**", value=(await self.bot.fetch_user(self.report.offender_id)).name)
                 else:
                     e.add_field(name="**OFFENDER:**", value=offender.display_name)
-
+            e.add_field(name="**TIMESTAMP:**", value=str(self.report.timestamp))
             if len(self.report.content) > 1500:
                 await ctx.send(embed=e)
                 await ctx.send("**CONTENT**")
