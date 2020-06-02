@@ -90,4 +90,4 @@ def clear_db():
         con.execute("DROP TABLE message_attachment;")
         con.execute("DROP TABLE message;")
         con.execute("DROP TABLE report;")
-        con.execute("DROP TABLE AdminRole;")
+        con.execute("DROP TABLE admin_roles;")
