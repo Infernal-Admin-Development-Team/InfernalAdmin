@@ -61,8 +61,8 @@ class ServerControl(Cog):
 
                     await ctx.send("No messages from " + member.name)
                     await member.send(
-                        "You have been kicked from Inferno games because you have not posted anything for a few months")
-                    await member.send("If you feel this was a mistake you can rejoin by clicking " + str(inviteLink))
+                        "You have been kicked from Inferno games because you have not posted anything for a while")
+                    await member.send("If you feel this was a mistake, or if you wish to become active again you can rejoin by clicking " + str(inviteLink))
                     await member.kick()
         s.close()
 
