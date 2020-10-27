@@ -57,6 +57,7 @@ class Welcome(commands.Cog):
         return temp_file
 
     @commands.command()
+    @check(is_owner)
     async def testwelcome(self, ctx):
         member = ctx.message.author
         await ctx.message.delete()
