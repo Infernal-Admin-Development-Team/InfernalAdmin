@@ -50,10 +50,10 @@ class InfernalAdminClient(commands.Bot):
         """Main message handler"""
         if message.author.bot:
             return
-        if self.get_member(message.author.id) is None:
+        """if self.get_member(message.author.id) is None:
             await message.author.send("Sorry but you are not a member of the server.")
             return
-        
+        """
         ctx = await self.get_context(message)
         """To make searching easier in the reporting system we save ALL messages in the DB.
         Except for messages in DM's with the bot and bot commands"""
